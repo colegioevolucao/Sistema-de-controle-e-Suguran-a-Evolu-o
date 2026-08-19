@@ -518,7 +518,32 @@ function stopCamera(){
  if(port.stream){port.stream.getTracks().forEach(t=>t.stop());port.stream=null}
 }
 
-async function decodeQrFromCanvas(canvas){
+// Gera uma variante da imagem com escala de cinza + contraste realçado.
+// Ajuda quando o QR está sendo lido da tela de outro telefone (baixo contraste, brilho da tela, reflexo).
+function enhanceCanvas(canvas){
+ const out=document.createElement('canvas');out.width=canvas.width;out.height=canvas.height;
+ const octx=out.getContext('2d',{willReadFrequently:true});
+ octx.filter='grayscale(1) contrast(1.6) brightness(1.08)';
+ octx.drawImage(canvas,0,0);
+ octx.filter='none';
+ return out;
+}
+
+// Gera uma variante levemente reduzida (com suavização), o que atenua o padrão de moiré
+// que aparece quando se fotografa um QR exibido na tela de outro aparelho (interferência
+// entre a grade de pixels do QR e a do sensor da câmera).
+function moireReduceCanvas(canvas){
+ const scale=0.6;
+ const out=document.createElement('canvas');
+ out.width=Math.max(1,Math.round(canvas.width*scale));
+ out.height=Math.max(1,Math.round(canvas.height*scale));
+ const octx=out.getContext('2d',{willReadFrequently:true});
+ octx.imageSmoothingEnabled=true; octx.imageSmoothingQuality='high';
+ octx.drawImage(canvas,0,0,out.width,out.height);
+ return out;
+}
+
+async function tryDecoders(canvas){
  scanDiag.attempts++;
  // 1) Decoder nativo
  if(nativeQrDetector){
@@ -539,6 +564,16 @@ async function decodeQrFromCanvas(canvas){
  }
  return null;
 }
+
+// Passes de tratamento de imagem, da mais barata para a mais custosa.
+// 'raw' cobre a leitura normal (telefone bem enquadrado e focado);
+// 'enhance' e 'moire' só rodam se nada foi lido, cobrindo os casos de baixo
+// contraste, brilho de tela e interferência ao ler o QR de outra tela.
+const SCAN_PASSES=[
+ {name:'',transform:c=>c},
+ {name:' · contraste',transform:enhanceCanvas},
+ {name:' · anti-moiré',transform:moireReduceCanvas}
+];
 
 function displayedFrameToVideoCrop(v,frameEl,expand=1){
  const vr=v.getBoundingClientRect(),fr=frameEl.getBoundingClientRect();
@@ -569,12 +604,19 @@ async function scanLoop(ts){
   // 1. moldura exata; 2. margem de 35%; 3. frame completo (a cada 3 ciclos)
   const regions=[displayedFrameToVideoCrop(v,frame,1),displayedFrameToVideoCrop(v,frame,1.35)];
   if(scanDiag.frames%3===0)regions.push({sx:0,sy:0,sw:v.videoWidth,sh:v.videoHeight});
+  const crops=regions.map((r,i)=>({label:`${r.sw}×${r.sh}${i===0?' (moldura)':i===1?' (margem)':' (frame completo)'}`,canvas:makeCropCanvas(v,r)}));
   let decoded=null,used='';
-  for(let i=0;i<regions.length&&!decoded;i++){
-   const r=regions[i]; const canvas=makeCropCanvas(v,r); used=`${r.sw}×${r.sh}${i===0?' (moldura)':i===1?' (margem)':' (frame completo)'}`;
-   decoded=await decodeQrFromCanvas(canvas);
+  // Passe rápido primeiro (imagem crua); só escala para contraste/anti-moiré se necessário,
+  // para não pesar no telefone do porteiro em toda leitura.
+  for(let p=0;p<SCAN_PASSES.length&&!decoded;p++){
+   const pass=SCAN_PASSES[p];
+   for(let i=0;i<crops.length&&!decoded;i++){
+    const {label,canvas}=crops[i];
+    decoded=await tryDecoders(pass.transform(canvas));
+    if(decoded)used=label+pass.name;
+   }
   }
-  updateDiagnostic({roi:used});
+  updateDiagnostic({roi:used||crops[crops.length-1]?.label||'—'});
   if(decoded?.value){
    const raw=String(decoded.value).trim(); updateDiagnostic({lastDetected:`${raw} · ${decoded.decoder}`,lastError:'—'}); processScan(raw);
   }
