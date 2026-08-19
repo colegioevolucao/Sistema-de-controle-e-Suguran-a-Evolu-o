@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#0B1E3D">
 <title>Acesso Seguro</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jsqr/1.4.0/jsQR.js"></script>
+<script src="https://unpkg.com/@zxing/library@0.21.3/umd/index.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
@@ -52,13 +53,10 @@ button{cursor:pointer}
 }
 .auth-logo{display:flex;justify-content:center;align-items:center;margin:2px 0 18px}
 .auth-logo img{display:block;width:260px;max-width:78%;height:auto;object-fit:contain}
-.auth-card:before{
-  content:'';display:block;position:absolute;left:50%;top:146px;transform:translateX(-50%);
-  width:190px;height:2px;background:linear-gradient(90deg,#d6deea 0 43%,#ff6f18 43% 58%,#d6deea 58% 100%);
-}
+.auth-card:before{display:none}
 .auth-title{
   font-size:36px;line-height:1.08;font-weight:800;letter-spacing:-1px;
-  text-align:center;margin:48px auto 10px;color:#0b3e7a;max-width:350px;
+  text-align:center;margin:24px auto 10px;color:#0b3e7a;max-width:350px;
 }
 .auth-tagline{
   font-family:Inter,Segoe UI,Arial,sans-serif;font-size:18px;line-height:1.38;
@@ -103,15 +101,15 @@ button{cursor:pointer}
 .forgot-note strong{display:block;color:#1558b3;font-size:14px}
 .btn{border:0;border-radius:12px;padding:12px 16px;font-weight:700}.btn-primary{background:#ff6f18;color:#fff}.btn-dark{background:var(--navy);color:#fff}.btn-ghost{background:#fff;border:1px solid #E4E7EC;color:#344054}.btn-danger{background:#FEE4E2;color:#B42318}.btn-sm{padding:8px 10px;font-size:12px}
 .auth-btn{
-  width:100%;min-height:102px;padding:16px 18px;margin-top:28px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;
+  width:min(100%,430px);min-height:126px;padding:18px 22px 20px;margin:26px auto 0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
   text-align:center;border-radius:20px;box-shadow:0 14px 26px rgba(255,111,24,.23);
   transition:transform .12s,filter .12s
 }
 .auth-btn:hover{filter:brightness(1.03)}.auth-btn:active{transform:translateY(1px)}
-.auth-btn>span:first-child{font-size:20px;font-weight:800;line-height:1.15}
-.auth-btn .auth-cta{display:flex;align-items:center;justify-content:center;gap:10px;font-size:29px;font-weight:800;line-height:1}
-.auth-btn .go-icon-img{width:52px;height:52px;display:block;object-fit:contain;flex:0 0 auto}
+.auth-btn>span:first-child{display:block;max-width:300px;font-size:18px;font-weight:800;line-height:1.14;margin:0 auto}
+.auth-btn .auth-cta{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;font-size:27px;font-weight:800;line-height:1.05;text-align:center}
+.auth-btn .go-icon-img{width:44px;height:44px;display:block;object-fit:contain;flex:0 0 auto}
 
 .auth-error{background:#fff1f0;border:1px solid #f5b6b0;color:#b42318;padding:10px 12px;border-radius:10px;font-size:12px;margin:0 0 12px}
 .auth-footer{
@@ -131,16 +129,16 @@ button{cursor:pointer}
   #auth{padding:22px 20px}
   .auth-card{width:100%;padding:28px 22px 24px;border-radius:24px}
   .auth-logo img{width:225px;max-width:82%}
-  .auth-card:before{top:132px;width:165px}
-  .auth-title{font-size:31px;margin-top:43px}
+  .auth-card:before{display:none}
+  .auth-title{font-size:31px;margin-top:28px;margin-bottom:10px}
   .auth-tagline{font-size:16px;margin-bottom:25px}
   .field input,.field select{height:55px;font-size:16px}
   .forgot-note{font-size:12px}
   .forgot-note strong{font-size:13px}
-  .auth-btn{min-height:94px;margin-top:24px}
-  .auth-btn>span:first-child{font-size:17px}
-  .auth-btn .auth-cta{font-size:25px}
-  .auth-btn .go-icon{width:33px;height:33px;font-size:30px}
+  .auth-btn{width:100%;min-height:118px;margin-top:24px;padding:16px 18px 18px;gap:10px}
+  .auth-btn>span:first-child{max-width:260px;font-size:16px}
+  .auth-btn .auth-cta{font-size:24px;gap:10px}
+  .auth-btn .go-icon-img{width:36px;height:36px}
 }
 
 /* APP SHELL */
@@ -158,6 +156,10 @@ button{cursor:pointer}
 #portaria-app{position:fixed;inset:0;background:var(--navy);color:var(--ink);display:flex;flex-direction:column;z-index:50}.port-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--navy2);border-bottom:1px solid var(--line)}.port-info{text-align:right;font-size:11px;color:var(--muted);line-height:1.4}.port-info b{color:#fff}.modebar{display:flex;gap:8px;padding:10px 12px}.mode{flex:1;padding:13px;border:2px solid transparent;border-radius:11px;background:var(--navy3);color:var(--muted);font-weight:800}.mode.active.entrada{border-color:var(--green);background:rgba(47,174,102,.15);color:#7AE1A6}.mode.active.saida{border-color:var(--red);background:rgba(225,82,82,.15);color:#FF9999}.scan-wrap{position:relative;flex:1;background:#000;overflow:hidden}.scan-wrap video{width:100%;height:100%;object-fit:cover}.scan-wrap canvas{display:none}.scan-frame{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(62vw,300px);height:min(62vw,300px);border:3px solid rgba(242,121,46,.8);border-radius:22px;box-shadow:0 0 0 9999px rgba(0,0,0,.25);pointer-events:none}.scan-hint{position:absolute;left:12px;right:12px;bottom:14px;text-align:center;background:rgba(11,30,61,.8);padding:9px;border-radius:10px;font-size:12px}.confirm-overlay{position:absolute;inset:0;background:var(--navy);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;opacity:0;pointer-events:none;transition:.1s}.confirm-overlay.show{opacity:1}.confirm-overlay.ok{background:linear-gradient(180deg,rgba(47,174,102,.25),var(--navy) 70%)}.confirm-overlay.warn{background:linear-gradient(180deg,rgba(232,163,61,.25),var(--navy) 70%)}.confirm-overlay.err{background:linear-gradient(180deg,rgba(225,82,82,.25),var(--navy) 70%)}.confirm-icon{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:38px;margin-bottom:12px}.ok .confirm-icon{background:var(--green)}.warn .confirm-icon{background:var(--amber)}.err .confirm-icon{background:var(--red)}.confirm-avatar{width:64px;height:64px;border-radius:50%;background:var(--navy3);border:2px solid var(--orange);display:flex;align-items:center;justify-content:center;font-weight:800;margin:5px}.confirm-name{font-size:21px;font-weight:800}.confirm-meta,.confirm-time{font-size:13px;color:var(--muted)}.confirm-status{font-weight:800;margin-top:8px}.ok .confirm-status{color:#7AE1A6}.warn .confirm-status{color:#FFD27A}.err .confirm-status{color:#FF9999}.port-footer{display:flex;align-items:center;background:var(--navy2);padding:8px 10px;border-top:1px solid var(--line)}.metric{flex:1;text-align:center}.metric b{display:block;font-size:17px}.metric span{font-size:10px;color:var(--muted)}.sync-state{font-size:10px;color:#7AE1A6}.demo-toggle{position:absolute;top:12px;right:12px;background:var(--navy2);color:var(--muted);border:1px solid var(--line);border-radius:20px;padding:7px 9px;font-size:10px}.demo-panel{position:absolute;left:0;right:0;bottom:0;background:var(--navy2);padding:12px;max-height:48%;overflow:auto;border-top:1px solid var(--line)}.demo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:7px}.demo-student{background:var(--navy3);border-radius:10px;padding:9px;text-align:center;font-size:10px}.demo-student b{display:block;color:#fff;margin-bottom:3px}.no-camera{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:28px;color:var(--muted);background:var(--navy)}
 .last-record{position:absolute;left:12px;right:12px;top:12px;z-index:8;display:none;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:rgba(11,30,61,.94);border:1px solid rgba(255,255,255,.12);box-shadow:0 8px 22px rgba(0,0,0,.28)}
 .last-record.show{display:flex}.last-record .lr-icon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;flex:0 0 auto}.last-record.ok .lr-icon{background:var(--green);color:#0B1E3D}.last-record.warn .lr-icon{background:var(--amber);color:#0B1E3D}.last-record.err .lr-icon{background:var(--red);color:#fff}.last-record .lr-main{min-width:0;flex:1}.last-record .lr-name{font-size:13px;font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.last-record .lr-status{font-size:11px;color:#c6d0e0;margin-top:2px}.last-record .lr-time{font-size:12px;font-weight:800;color:#fff;flex:0 0 auto}
+
+.scan-diagnostic-toggle{position:absolute;top:12px;left:12px;z-index:9;background:rgba(11,30,61,.92);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:18px;padding:7px 10px;font-size:10px}
+.scan-diagnostic{position:absolute;left:10px;right:10px;top:54px;z-index:9;background:rgba(4,15,32,.94);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:10px;color:#dbe7f7;font-size:10px;line-height:1.55;display:none;max-height:38%;overflow:auto}
+.scan-diagnostic.show{display:block}.scan-diagnostic b{color:#fff}.scan-diagnostic .good{color:#7AE1A6}.scan-diagnostic .bad{color:#FFD27A}
 
 
 
@@ -240,6 +242,8 @@ button{cursor:pointer}
     <div id="scan-hint" class="scan-hint">Aponte a câmera para o QR Code — registrando ENTRADA</div>
     <div id="no-camera" class="no-camera hidden"><div><div style="font-size:34px">📷</div><b>Câmera indisponível</b><br><span>Permita o acesso à câmera ou use o modo demonstração.</span></div></div>
     <button class="demo-toggle" id="demo-toggle">Simulação manual</button>
+    <button class="scan-diagnostic-toggle" id="diag-toggle">Diagnóstico QR</button>
+    <div class="scan-diagnostic" id="scan-diagnostic"><b>Diagnóstico do scanner</b><div id="diag-text">Inicializando câmera…</div></div>
     <div class="demo-panel hidden" id="demo-panel"><div style="font-size:11px;color:var(--muted);margin-bottom:8px">SIMULAÇÃO MANUAL — CLIQUE EM UM ALUNO</div><div id="demo-grid" class="demo-grid"></div></div>
     <div id="last-record" class="last-record"><div class="lr-icon" id="lr-icon">✓</div><div class="lr-main"><div class="lr-name" id="lr-name">—</div><div class="lr-status" id="lr-status">—</div></div><div class="lr-time" id="lr-time">--:--</div></div>
     <div id="confirm" class="confirm-overlay"><div class="confirm-icon" id="confirm-icon">✓</div><div class="confirm-avatar" id="confirm-avatar"></div><div class="confirm-name" id="confirm-name"></div><div class="confirm-meta" id="confirm-meta"></div><div class="confirm-status" id="confirm-status"></div><div class="confirm-time" id="confirm-time"></div></div>
@@ -449,8 +453,16 @@ function updatePortMetrics(){if(!$('#m-total'))return; const now=Date.now();port
 setInterval(updatePortMetrics,1000);
 function updateNet(){if(!$('#net-badge'))return;$('#net-badge').textContent=navigator.onLine?'● online':'● offline';$('#net-badge').style.color=navigator.onLine?'#7AE1A6':'#FFD27A'}
 window.addEventListener('online',()=>{records.forEach(r=>{if(r.synced===false)r.synced=true});saveRecords();updateNet();updatePortMetrics()});window.addEventListener('offline',updateNet);
-let scanTimer=null,scanBusy=false,lastFrameAt=0,nativeQrDetector=null;
-const SCAN_INTERVAL_MS=80; // ~12,5 análises/s: suficiente para fluxo rápido sem saturar o celular
+let scanTimer=null,scanBusy=false,lastFrameAt=0,nativeQrDetector=null,zxingQrReader=null;
+const SCAN_INTERVAL_MS=90; // ~11 análises/s
+let scanDiag={attempts:0,frames:0,lastDetected:'—',decoder:'inicializando',resolution:'—',focus:'—',roi:'—',lastError:'—'};
+
+function updateDiagnostic(extra={}){
+ Object.assign(scanDiag,extra);
+ const el=$('#diag-text'); if(!el)return;
+ el.innerHTML=`Resolução real: <b>${scanDiag.resolution}</b><br>Foco: <b>${scanDiag.focus}</b><br>Decoder: <b>${scanDiag.decoder}</b><br>ROI analisado: <b>${scanDiag.roi}</b><br>Frames analisados: <b>${scanDiag.frames}</b><br>Tentativas decoder: <b>${scanDiag.attempts}</b><br>Última detecção: <b class="${scanDiag.lastDetected!=='—'?'good':''}">${esc(String(scanDiag.lastDetected))}</b>${scanDiag.lastError&&scanDiag.lastError!=='—'?`<br>Último aviso: <span class="bad">${esc(scanDiag.lastError)}</span>`:''}`;
+}
+$('#diag-toggle').onclick=()=>{$('#scan-diagnostic').classList.toggle('show');updateDiagnostic()};
 
 async function configureCameraTrack(track){
  try{
@@ -479,10 +491,7 @@ async function startCamera(){
   const track=stream.getVideoTracks()[0];
   await configureCameraTrack(track);
   const v=$('#video');
-  v.srcObject=stream;
-  v.setAttribute('playsinline','');
-  v.muted=true;
-  await v.play();
+  v.srcObject=stream; v.setAttribute('playsinline',''); v.muted=true; await v.play();
   port.streamOk=true;
   try{
    if('BarcodeDetector' in window){
@@ -490,61 +499,86 @@ async function startCamera(){
     if(supported.includes('qr_code'))nativeQrDetector=new BarcodeDetector({formats:['qr_code']});
    }
   }catch(e){nativeQrDetector=null}
+  try{
+   if(window.ZXing && ZXing.BrowserQRCodeReader)zxingQrReader=new ZXing.BrowserQRCodeReader();
+  }catch(e){zxingQrReader=null}
   const st=track.getSettings?track.getSettings():{};
-  console.info('Scanner Evolução:',{camera:st.facingMode||'environment',width:st.width,height:st.height,frameRate:st.frameRate,focusMode:st.focusMode,decoder:nativeQrDetector?'BarcodeDetector + jsQR':'jsQR'});
-  lastFrameAt=0;
-  requestAnimationFrame(scanLoop);
+  const decoders=[nativeQrDetector?'BarcodeDetector':null,zxingQrReader?'ZXing':null,window.jsQR?'jsQR':null].filter(Boolean).join(' → ');
+  updateDiagnostic({resolution:`${st.width||v.videoWidth||'?'}×${st.height||v.videoHeight||'?'}`,focus:st.focusMode||'automático do aparelho',decoder:decoders||'nenhum',lastError:'—'});
+  console.info('Scanner Evolução:',{camera:st.facingMode||'environment',width:st.width,height:st.height,frameRate:st.frameRate,focusMode:st.focusMode,decoder:decoders});
+  lastFrameAt=0; requestAnimationFrame(scanLoop);
  }catch(e){
-  console.error('Falha ao abrir câmera:',e);
-  $('#no-camera').classList.remove('hidden');
+  console.error('Falha ao abrir câmera:',e); updateDiagnostic({lastError:'Falha ao abrir câmera: '+e.message}); $('#no-camera').classList.remove('hidden');
  }
 }
 
 function stopCamera(){
- port.streamOk=false;scanBusy=false;nativeQrDetector=null;
+ port.streamOk=false;scanBusy=false;nativeQrDetector=null;zxingQrReader=null;
  if(scanTimer){clearTimeout(scanTimer);scanTimer=null}
  if(port.stream){port.stream.getTracks().forEach(t=>t.stop());port.stream=null}
 }
 
 async function decodeQrFromCanvas(canvas){
- // 1º: decoder nativo do navegador, quando disponível (muito eficiente em aparelhos compatíveis)
+ scanDiag.attempts++;
+ // 1) Decoder nativo
  if(nativeQrDetector){
-  try{
-   const found=await nativeQrDetector.detect(canvas);
-   if(found&&found.length&&found[0].rawValue)return found[0].rawValue;
-  }catch(e){}
+  try{const found=await nativeQrDetector.detect(canvas);if(found?.length&&found[0].rawValue)return {value:found[0].rawValue,decoder:'BarcodeDetector'}}catch(e){}
  }
- // 2º: jsQR como fallback universal. Mantém a resolução do recorte, sem downscale agressivo.
+ // 2) ZXing — mais robusto para Safari/iPhone e QR fotografado de outra tela
+ if(zxingQrReader){
+  try{const result=await zxingQrReader.decodeFromCanvas(canvas);const text=result?.getText?result.getText():result?.text;if(text)return {value:text,decoder:'ZXing'}}catch(e){}
+ }
+ // 3) jsQR fallback
  if(window.jsQR){
   try{
-   const ctx=canvas.getContext('2d',{willReadFrequently:true});
-   const img=ctx.getImageData(0,0,canvas.width,canvas.height);
+   const ctx=canvas.getContext('2d',{willReadFrequently:true}); const img=ctx.getImageData(0,0,canvas.width,canvas.height);
    let code=jsQR(img.data,img.width,img.height,{inversionAttempts:'dontInvert'});
    if(!code)code=jsQR(img.data,img.width,img.height,{inversionAttempts:'attemptBoth'});
-   if(code?.data)return code.data;
+   if(code?.data)return {value:code.data,decoder:'jsQR'};
   }catch(e){}
  }
  return null;
 }
 
+function displayedFrameToVideoCrop(v,frameEl,expand=1){
+ const vr=v.getBoundingClientRect(),fr=frameEl.getBoundingClientRect();
+ const vw=v.videoWidth,vh=v.videoHeight,cw=vr.width,ch=vr.height;
+ // CSS object-fit:cover — converte exatamente a moldura visível para coordenadas do frame da câmera.
+ const scale=Math.max(cw/vw,ch/vh);
+ const rw=vw*scale,rh=vh*scale;
+ const offsetX=(cw-rw)/2,offsetY=(ch-rh)/2;
+ let fx=(fr.left-vr.left),fy=(fr.top-vr.top),fw=fr.width,fh=fr.height;
+ const cx=fx+fw/2,cy=fy+fh/2; fw*=expand;fh*=expand;fx=cx-fw/2;fy=cy-fh/2;
+ let sx=(fx-offsetX)/scale,sy=(fy-offsetY)/scale,sw=fw/scale,sh=fh/scale;
+ sx=Math.max(0,sx);sy=Math.max(0,sy);sw=Math.min(vw-sx,sw);sh=Math.min(vh-sy,sh);
+ return {sx:Math.round(sx),sy:Math.round(sy),sw:Math.max(1,Math.round(sw)),sh:Math.max(1,Math.round(sh))};
+}
+
+function makeCropCanvas(v,crop){
+ const out=document.createElement('canvas');out.width=crop.sw;out.height=crop.sh;
+ out.getContext('2d',{willReadFrequently:true}).drawImage(v,crop.sx,crop.sy,crop.sw,crop.sh,0,0,crop.sw,crop.sh);
+ return out;
+}
+
 async function scanLoop(ts){
- if(!port.streamOk)return;
- requestAnimationFrame(scanLoop);
+ if(!port.streamOk)return; requestAnimationFrame(scanLoop);
  if(scanBusy||ts-lastFrameAt<SCAN_INTERVAL_MS)return;
- const v=$('#video'),c=$('#scan-canvas');
- if(!v||v.readyState!==v.HAVE_ENOUGH_DATA||!v.videoWidth||!v.videoHeight)return;
- lastFrameAt=ts;scanBusy=true;
+ const v=$('#video'),frame=$('#scan-frame'); if(!v||v.readyState!==v.HAVE_ENOUGH_DATA||!v.videoWidth||!v.videoHeight)return;
+ lastFrameAt=ts;scanBusy=true;scanDiag.frames++;
  try{
-  // Analisa a região central onde o usuário posiciona o QR. Não reduz a imagem: recorta pixels nativos.
-  const vw=v.videoWidth,vh=v.videoHeight;
-  const side=Math.floor(Math.min(vw,vh)*0.72);
-  const sx=Math.floor((vw-side)/2),sy=Math.floor((vh-side)/2);
-  c.width=side;c.height=side;
-  const ctx=c.getContext('2d',{willReadFrequently:true});
-  ctx.drawImage(v,sx,sy,side,side,0,0,side,side);
-  const decoded=await decodeQrFromCanvas(c);
-  if(decoded)processScan(String(decoded).trim());
- }catch(e){console.warn('Erro no frame do scanner:',e)}
+  // 1. moldura exata; 2. margem de 35%; 3. frame completo (a cada 3 ciclos)
+  const regions=[displayedFrameToVideoCrop(v,frame,1),displayedFrameToVideoCrop(v,frame,1.35)];
+  if(scanDiag.frames%3===0)regions.push({sx:0,sy:0,sw:v.videoWidth,sh:v.videoHeight});
+  let decoded=null,used='';
+  for(let i=0;i<regions.length&&!decoded;i++){
+   const r=regions[i]; const canvas=makeCropCanvas(v,r); used=`${r.sw}×${r.sh}${i===0?' (moldura)':i===1?' (margem)':' (frame completo)'}`;
+   decoded=await decodeQrFromCanvas(canvas);
+  }
+  updateDiagnostic({roi:used});
+  if(decoded?.value){
+   const raw=String(decoded.value).trim(); updateDiagnostic({lastDetected:`${raw} · ${decoded.decoder}`,lastError:'—'}); processScan(raw);
+  }
+ }catch(e){console.warn('Erro no frame do scanner:',e);updateDiagnostic({lastError:e.message||String(e)})}
  finally{scanBusy=false}
 }
 
