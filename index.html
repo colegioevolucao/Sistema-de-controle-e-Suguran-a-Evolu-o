@@ -766,27 +766,94 @@ function renderDashboard(){
 function recordsTable(list){return `<div class="table-wrap"><table class="table"><thead><tr><th>Aluno</th><th>Série/Turma</th><th>Autorização de saída</th><th>Tipo</th><th>Horário</th><th>Portaria</th><th>Status</th></tr></thead><tbody>${list.length?list.map(r=>{const s=studentByMat(r.mat);return `<tr><td><div class="student-cell"><span class="avatar">${initials(s?.nome||'?')}</span><div><b>${esc(s?.nome||r.mat)}</b><br><small>${r.mat}</small></div></div></td><td>${s?studentLabel(s):'—'}</td><td>${s?exitPermissionBadge(s):'—'}</td><td>${r.type.includes('entrada')?'Entrada':'Saída'}</td><td>${fmtTime(r.ts)}</td><td>${esc(r.portaria||'—')}</td><td>${r.exception?'<span class="pill amber">Exceção</span>':r.synced===false?'<span class="pill amber">Pendente</span>':'<span class="pill green">Confirmado</span>'}</td></tr>`}).join(''):'<tr><td colspan="6"><div class="empty">Nenhuma movimentação.</div></td></tr>'}</tbody></table></div>`}
 
 async function renderMovimentacoes(){
- setTitle('Movimentações'); const series=sortedSeries(); $('#view').innerHTML=`<div class="card card-pad"><div class="filters" style="align-items:center"><input id="f-search" placeholder="Buscar por nome, matrícula ou código"><button class="btn btn-dark" id="f-search-btn">Buscar</button><input id="f-date" type="date" value="${todayISO()}"><select id="f-serie"><option value="">Todas as séries</option>${series.map(x=>`<option>${x}</option>`).join('')}</select><select id="f-type"><option value="">Entrada e saída</option><option value="entrada">Entradas</option><option value="saida">Saídas</option></select></div><div id="mov-search-status"></div><div id="mov-table"><div class="empty">Atualizando movimentações...</div></div></div>`;
+ setTitle('Movimentações');
+ const series=sortedSeries();
+ $('#view').innerHTML=`<div class="card card-pad">
+   <div class="filters" style="align-items:center">
+     <input id="f-search" placeholder="Buscar por nome, matrícula ou código">
+     <button class="btn btn-dark" id="f-search-btn">Buscar</button>
+     <input id="f-date" type="date" value="${todayISO()}">
+     <select id="f-serie"><option value="">Todas as séries</option>${series.map(x=>`<option>${x}</option>`).join('')}</select>
+     <select id="f-turma"><option value="">Todas as turmas</option></select>
+     <select id="f-type"><option value="">Entrada e saída</option><option value="entrada">Entradas</option><option value="saida">Saídas</option></select>
+   </div>
+   <div id="mov-student-picker"></div>
+   <div id="mov-search-status"></div>
+   <div id="mov-table"><div class="empty">Atualizando movimentações...</div></div>
+ </div>`;
+
+ function updateTurmas(){
+   const ser=$('#f-serie').value;
+   const turmas=[...new Set(students.filter(s=>!ser||s.serie===ser).map(s=>s.turma))]
+     .sort((a,b)=>String(a).localeCompare(String(b),'pt-BR',{numeric:true,sensitivity:'base'}));
+   const atual=$('#f-turma').value;
+   $('#f-turma').innerHTML='<option value="">Todas as turmas</option>'+turmas.map(t=>`<option value="${esc(t)}">Turma ${esc(t)}</option>`).join('');
+   if(turmas.includes(atual)) $('#f-turma').value=atual;
+ }
+ updateTurmas();
+
  $('#f-search-btn').onclick=()=>refreshMov(true);
+ $('#f-search').addEventListener('input',()=>refreshMov(false));
  $('#f-search').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();refreshMov(true)}});
- ['f-date','f-serie','f-type'].forEach(id=>$('#'+id).addEventListener('change',()=>refreshMov(false)));
+ $('#f-serie').addEventListener('change',()=>{updateTurmas();refreshMov(false)});
+ $('#f-turma').addEventListener('change',()=>refreshMov(false));
+ ['f-date','f-type'].forEach(id=>$('#'+id).addEventListener('change',()=>refreshMov(false)));
  try{await syncAllRecords()}catch(e){console.error(e)}
  await refreshMov(false);
 }
+
 async function refreshMov(forceSync=false){
  if(forceSync){try{await syncAllRecords()}catch(e){console.error(e)}}
- const q=normalizeText($('#f-search')?.value||''),d=$('#f-date')?.value||'',ser=$('#f-serie')?.value||'',t=$('#f-type')?.value||'';
- const matchedStudents=q?alphaStudents(students.filter(s=>normalizeText(s.nome||'').includes(q)||normalizeText(s.mat||'').includes(q)||normalizeText(s.codigo||'').includes(q))):[];
+ const q=normalizeText($('#f-search')?.value||'');
+ const d=$('#f-date')?.value||'';
+ const ser=$('#f-serie')?.value||'';
+ const turma=$('#f-turma')?.value||'';
+ const t=$('#f-type')?.value||'';
+
+ const baseStudents=alphaStudents(students.filter(s=>(!ser||s.serie===ser)&&(!turma||s.turma===turma)));
+ const matchedStudents=alphaStudents(baseStudents.filter(s=>!q||normalizeText(s.nome||'').includes(q)||normalizeText(s.mat||'').includes(q)||normalizeText(s.codigo||'').includes(q)));
  const matchedMats=new Set(matchedStudents.map(s=>s.mat));
- const list=records.filter(r=>{const s=studentByMat(r.mat);return (!d||r.date===d)&&(!ser||s?.serie===ser)&&(!t||r.type.startsWith(t))&&(!q||matchedMats.has(r.mat))}).sort((a,b)=>b.ts-a.ts);
+ const applyStudentFilter=Boolean(q||ser||turma);
+
+ const list=records.filter(r=>{
+   const st=studentByMat(r.mat);
+   return (!d||r.date===d)
+     &&(!ser||st?.serie===ser)
+     &&(!turma||st?.turma===turma)
+     &&(!t||r.type.startsWith(t))
+     &&(!applyStudentFilter||matchedMats.has(r.mat));
+ }).sort((a,b)=>b.ts-a.ts);
+
+ const picker=$('#mov-student-picker');
+ if(picker){
+   if(q||ser||turma){
+     const title=turma?`Alunos da ${esc(ser||'série')} — Turma ${esc(turma)}`:ser?`Alunos da ${esc(ser)}`:'Alunos localizados';
+     picker.innerHTML=`<div class="card" style="padding:12px 14px;margin:0 0 12px;background:#f8fafc;box-shadow:none">
+       <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px"><b>${title}</b><span style="font-size:12px;color:var(--text2)">${matchedStudents.length} aluno(s)</span></div>
+       ${matchedStudents.length?`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:7px;max-height:260px;overflow:auto;padding-right:4px">${matchedStudents.map(s=>`<button type="button" class="btn btn-ghost mov-student-pick" data-mat="${s.mat}" style="text-align:left;padding:9px 11px;display:block"><b>${esc(s.nome)}</b><br><small>${esc(studentLabel(s))} · ${esc(s.codigo||'')} · ${esc(s.mat)}</small></button>`).join('')}</div>`:'<div class="empty" style="padding:14px">Nenhum aluno encontrado com esses filtros.</div>'}
+     </div>`;
+     $$('.mov-student-pick').forEach(b=>b.onclick=()=>{
+       const st=studentByMat(b.dataset.mat); if(!st)return;
+       $('#f-search').value=st.nome;
+       refreshMov(false);
+     });
+   } else {
+     picker.innerHTML='<div style="font-size:12px;color:var(--text2);margin:0 0 12px">Para localizar um aluno, selecione a série e a turma ou digite o nome, matrícula ou código.</div>';
+   }
+ }
+
  const status=$('#mov-search-status');
  if(status){
-   if(q&&matchedStudents.length===0) status.innerHTML='<div class="evoluir-flash err" style="margin:0 0 12px">Nenhum aluno localizado com esse nome, matrícula ou código.</div>';
-   else if(q&&matchedStudents.length&&list.length===0) status.innerHTML=`<div class="card" style="padding:12px 14px;margin:0 0 12px;background:#f8fafc;box-shadow:none"><b>${matchedStudents.length===1?'Aluno localizado':'Alunos localizados'}</b><div style="font-size:12px;color:var(--text2);margin-top:5px">${matchedStudents.slice(0,8).map(s=>`${esc(s.nome)} — ${studentLabel(s)} · ${esc(s.codigo||'')}`).join('<br>')}<br><span style="color:#b54708">Sem movimentação para os filtros selecionados.</span></div></div>`;
-   else if(q&&matchedStudents.length) status.innerHTML=`<div style="font-size:12px;color:var(--text2);margin:0 0 10px">${matchedStudents.length} aluno(s) localizado(s) · ${list.length} movimentação(ões) encontrada(s).</div>`;
-   else status.innerHTML='';
+   if((q||ser||turma)&&matchedStudents.length===0){
+     status.innerHTML='<div class="evoluir-flash err" style="margin:0 0 12px">Nenhum aluno localizado com os filtros selecionados.</div>';
+   }else if(matchedStudents.length===1&&list.length===0){
+     const st=matchedStudents[0];
+     status.innerHTML=`<div class="evoluir-flash" style="margin:0 0 12px;background:#fff7ed;color:#9a3412;border:1px solid #fed7aa"><b>${esc(st.nome)}</b> foi localizado, mas não possui movimentação para a data/tipo selecionados.</div>`;
+   }else if(matchedStudents.length===1&&list.length){
+     status.innerHTML=`<div style="font-size:12px;color:var(--text2);margin:0 0 10px"><b>${esc(matchedStudents[0].nome)}</b> · ${list.length} movimentação(ões) encontrada(s).</div>`;
+   }else status.innerHTML='';
  }
- $('#mov-table').innerHTML=recordsTable(list)
+ $('#mov-table').innerHTML=recordsTable(list);
 }
 function renderNaEscola(){setTitle('Na Escola Agora'); const ins=students.filter(s=>s.status==='ativo'&&statusAt(s.mat).kind==='inside'); $('#view').innerHTML=`<div class="card card-pad"><div class="section-title"><div><h2>${ins.length} alunos na escola</h2><p>Entrada registrada e sem saída posterior</p></div></div>${studentStatusTable(ins,'inside')}</div>`}
 function studentStatusTable(list,mode){const ordered=alphaStudents(list);return `<div class="table-wrap"><table class="table"><thead><tr><th>Aluno</th><th>Série/Turma</th><th>Entrada</th><th>Saída</th><th>Autorização de saída</th><th>Situação</th></tr></thead><tbody>${ordered.length?ordered.map(s=>{const st=statusAt(s.mat);return `<tr><td><div class="student-cell"><span class="avatar">${initials(s.nome)}</span><div><b>${esc(s.nome)}</b><br><small>${s.mat}</small></div></div></td><td>${studentLabel(s)}</td><td>${fmtTime(st.entrada?.ts)}</td><td>${fmtTime(st.saida?.ts)}</td><td>${exitPermissionBadge(s)}${s.exitNote?`<div class="exit-note-cell"><small>${esc(s.exitNote)}</small></div>`:''}</td><td>${st.kind==='inside'?'<span class="pill green">Na escola</span>':st.kind==='out'?'<span class="pill gray">Saiu</span>':'<span class="pill red">Sem entrada</span>'}</td></tr>`}).join(''):'<tr><td colspan="5"><div class="empty">Nenhum aluno nesta situação.</div></td></tr>'}</tbody></table></div>`}
