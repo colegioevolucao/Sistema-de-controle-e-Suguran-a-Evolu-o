@@ -418,6 +418,10 @@ async function supabaseRpc(fn,payload={}){
 }
 function localDateISO(ts){const d=new Date(ts);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 function centralRowToRecord(r){const ts=new Date(r.registrado_em).getTime();return {id:`db-${r.id}`,dbId:r.id,mat:r.matricula,type:r.tipo,date:localDateISO(ts),ts,portaria:r.portaria||'',operator:r.operador||'',synced:true,central:true}}
+async function logStudentUsage(mat,eventType){try{await supabaseRpc('log_student_usage',{p_matricula:mat,p_event_type:eventType})}catch(e){console.warn('Falha ao registrar uso do aluno:',e)}}
+async function logFamilyUsage(eventType,mat=null){try{await supabaseRpc('log_family_usage',{p_event_type:eventType,p_matricula:mat||null})}catch(e){console.warn('Falha ao registrar uso da família:',e)}}
+async function logCredentialGeneration(s,type){try{await supabaseRpc('log_credential_generation',{p_matricula:s.mat,p_generation_type:type,p_operator_name:session?.name||session?.username||'Sistema',p_source_role:session?.role||'desconhecido'})}catch(e){console.warn('Falha ao registrar geração de credencial:',e)}}
+
 async function syncAllRecords(){if(!navigator.onLine)return records;const data=await supabaseRpc('get_access_records',{p_limit:5000});records=(data||[]).map(centralRowToRecord);saveRecords();return records}
 async function syncStudentRecords(mat){if(!navigator.onLine)return records.filter(r=>r.mat===mat);const data=await supabaseRpc('get_student_history',{p_matricula:mat,p_limit:500});const other=records.filter(r=>r.mat!==mat);const mine=(data||[]).map(r=>centralRowToRecord({...r,matricula:mat}));records=[...other,...mine];saveRecords();return mine}
 async function syncExitPermissions(){
@@ -507,7 +511,7 @@ async function login(){
      const meta=data.user?.user_metadata||{};
      if(meta.account_type!=='family'){$('#auth-error').textContent='Este e-mail não possui perfil familiar.';$('#auth-error').classList.remove('hidden');await sbAuthClient.auth.signOut();familyAuthSession=null;return}
      session={username:u,name:meta.full_name||u.split('@')[0],role:'familia',authUserId:data.user.id};
-     $('#auth-error').classList.add('hidden');addAudit('LOGIN','Família');$('#auth').classList.add('hidden');
+     $('#auth-error').classList.add('hidden');addAudit('LOGIN','Família');await logFamilyUsage('login');$('#auth').classList.add('hidden');
      try{await refreshFamilyChildren()}catch(e){console.warn('Falha ao carregar filhos:',e)}
      openShell();return;
    }
@@ -526,7 +530,7 @@ async function login(){
    }
  }
  if(!found || (found.pass && found.pass!==p)){$('#auth-error').textContent='Usuário ou senha inválidos.';$('#auth-error').classList.remove('hidden');return}
- $('#auth-error').classList.add('hidden'); session={username:u,...found}; addAudit('LOGIN',roleLabel(found.role)); $('#auth').classList.add('hidden');
+ $('#auth-error').classList.add('hidden'); session={username:u,...found}; addAudit('LOGIN',roleLabel(found.role)); if(found.role==='aluno') await logStudentUsage(found.mat,'login'); $('#auth').classList.add('hidden');
  if(found.role==='porteiro' && found.mustChange) forceStaffPasswordChange();
  else if(found.role==='porteiro') openPortariaSetup();
  else if(found.role==='aluno' && studentAuth[found.mat]?.mustChange) forcePasswordChange(true);
@@ -541,7 +545,7 @@ const navMap={
  familia:[['familia-filhos','♟','Meus filhos'],['familia-acesso','↕','Acesso à Escola'],['familia-evoluir','◆','Espaço Evoluir'],['familia-aviso','✦','Avisar Portaria'],['familia-historico','◎','Meus avisos']],
  orientadora:[['espaco-evoluir','◆','Espaço Evoluir']],
  gestao:[['dashboard','⌂','Visão Geral'],['movimentacoes','↕','Movimentações'],['na-escola','●','Na Escola Agora'],['pendencias','!','Pendências'],['alunos','♟','Alunos'],['credenciais-digitais','◇','Credenciais Digitais'],['espaco-evoluir','◆','Espaço Evoluir'],['acessos-portaria','▣','Porteiros e Portarias'],['avisos-familia','✦','Avisos da Família'],['atrasos','◷','Atrasos'],['relatorios','▤','Relatórios']],
- admin:[['dashboard','⌂','Visão Geral'],['movimentacoes','↕','Movimentações'],['na-escola','●','Na Escola Agora'],['pendencias','!','Pendências'],['alunos','♟','Alunos'],['credenciais-digitais','◇','Credenciais Digitais'],['espaco-evoluir','◆','Espaço Evoluir'],['acessos-portaria','▣','Porteiros e Portarias'],['avisos-familia','✦','Avisos da Família'],['atrasos','◷','Atrasos'],['relatorios','▤','Relatórios'],['usuarios','♙','Usuários'],['auditoria','◎','Auditoria'],['config','⚙','Configurações']]
+ admin:[['dashboard','⌂','Visão Geral'],['movimentacoes','↕','Movimentações'],['na-escola','●','Na Escola Agora'],['pendencias','!','Pendências'],['alunos','♟','Alunos'],['credenciais-digitais','◇','Credenciais Digitais'],['espaco-evoluir','◆','Espaço Evoluir'],['acessos-portaria','▣','Porteiros e Portarias'],['avisos-familia','✦','Avisos da Família'],['atrasos','◷','Atrasos'],['relatorios','▤','Relatórios'],['uso-sistema','◉','Relatório de Uso do Sistema'],['usuarios','♙','Usuários'],['auditoria','◎','Auditoria'],['config','⚙','Configurações']]
 };
 function openShell(){
  $('#shell').classList.remove('hidden'); $('#side-name').textContent=session.name; $('#side-role').textContent=roleLabel(session.role); $('#today-label').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
@@ -551,7 +555,7 @@ function openShell(){
 async function renderView(v){
  currentView=v;
  if(['gestao','admin'].includes(session?.role) && ['dashboard','movimentacoes','na-escola','pendencias','atrasos','relatorios'].includes(v)){try{await syncAllRecords()}catch(e){console.error('Falha ao sincronizar gestão:',e)}} try{await syncExitPermissions()}catch(e){console.error('Falha ao sincronizar autorizações de saída:',e)} $$('#nav .nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===v)); $('#sidebar').classList.remove('open'); $('#top-actions').innerHTML='';
- const map={carteira:renderCarteira,'credencial-digital':renderMinhaCredencial,'credenciais-digitais':renderCredenciaisDigitais,'meu-historico':renderMeuHistorico,'meu-evoluir':renderMeuEvoluir,'espaco-evoluir':renderEspacoEvoluir,'familia-filhos':renderFamiliaFilhos,'familia-acesso':renderFamiliaAcesso,'familia-evoluir':renderFamiliaEvoluir,'familia-aviso':renderFamiliaAviso,'familia-historico':renderFamiliaHistorico,dashboard:renderDashboard,movimentacoes:renderMovimentacoes,'na-escola':renderNaEscola,pendencias:renderPendencias,alunos:renderAlunos,atrasos:renderAtrasos,relatorios:renderRelatorios,'acessos-portaria':renderAcessosPortaria,'avisos-familia':renderAvisosFamiliaHistorico,usuarios:renderUsuarios,auditoria:renderAuditoria,config:renderConfig};
+ const map={carteira:renderCarteira,'credencial-digital':renderMinhaCredencial,'credenciais-digitais':renderCredenciaisDigitais,'meu-historico':renderMeuHistorico,'meu-evoluir':renderMeuEvoluir,'espaco-evoluir':renderEspacoEvoluir,'familia-filhos':renderFamiliaFilhos,'familia-acesso':renderFamiliaAcesso,'familia-evoluir':renderFamiliaEvoluir,'familia-aviso':renderFamiliaAviso,'familia-historico':renderFamiliaHistorico,dashboard:renderDashboard,movimentacoes:renderMovimentacoes,'na-escola':renderNaEscola,pendencias:renderPendencias,alunos:renderAlunos,atrasos:renderAtrasos,relatorios:renderRelatorios,'uso-sistema':renderSystemUsageReport,'acessos-portaria':renderAcessosPortaria,'avisos-familia':renderAvisosFamiliaHistorico,usuarios:renderUsuarios,auditoria:renderAuditoria,config:renderConfig};
  (map[v]||renderDashboard)();
 }
 function setTitle(t){$('#page-title').textContent=t}
@@ -804,9 +808,11 @@ async function exportCredentialCard(s,format='jpg',selector='.digital-pass'){
    const safe=(normalizeText(s.nome).replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'')||s.mat);
    if(format==='jpg'){
      const a=document.createElement('a'); a.href=canvas.toDataURL('image/jpeg',0.94); a.download=`credencial_evolucao_${safe}.jpg`; a.click();
+     await logCredentialGeneration(s,'jpg');
    }else{
      const J=getJsPDF(); if(!J){alert('Gerador de PDF indisponível neste navegador.');return}
      const img=canvas.toDataURL('image/png'); const w=86; const h=w*canvas.height/canvas.width; const doc=new J({orientation:'portrait',unit:'mm',format:'a4'}); const x=(210-w)/2; const y=Math.max(12,(297-h)/2); doc.addImage(img,'PNG',x,y,w,h); doc.save(`credencial_evolucao_${safe}.pdf`);
+     await logCredentialGeneration(s,'pdf');
    }
  }catch(e){console.error(e);alert('Não foi possível gerar o arquivo da credencial. Tente novamente.')}
 }
@@ -829,6 +835,36 @@ function renderAcessosPortaria(){setTitle('Porteiros e Portarias'); const portei
  $$('.reset-staff').forEach(b=>b.onclick=()=>{const u=b.dataset.u;if(!confirm(`Resetar a senha de ${users[u].name} para 123456?`))return;users[u].pass='123456';users[u].mustChange=true;saveStaff();addAudit('RESET SENHA PORTEIRO',u);alert('Senha redefinida para 123456.');renderAcessosPortaria();});
  $$('.del-portaria').forEach(b=>b.onclick=()=>{if(portarias.length<=1){alert('É necessário manter pelo menos uma portaria.');return}const i=Number(b.dataset.i),nome=portarias[i];if(confirm(`Excluir ${nome}?`)){portarias.splice(i,1);saveStaff();addAudit('EXCLUSÃO PORTARIA',nome);renderAcessosPortaria();}});
 }
+async function renderSystemUsageReport(){
+ setTitle('Relatório de Uso do Sistema');
+ $('#view').innerHTML=`<div class="card card-pad"><div class="empty">Carregando relatório de uso...</div></div>`;
+ try{
+  const [sumRaw,accessed,never,families,credentials]=await Promise.all([
+   supabaseRpc('get_system_usage_summary',{}),
+   supabaseRpc('get_students_usage_report',{p_accessed:true}),
+   supabaseRpc('get_students_usage_report',{p_accessed:false}),
+   supabaseRpc('get_families_usage_report',{}),
+   supabaseRpc('get_credential_generation_report',{})
+  ]);
+  const sum=Array.isArray(sumRaw)?(sumRaw[0]||{}):(sumRaw||{});
+  const fmtDT=v=>v?new Date(v).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
+  const credLabel=t=>({pdf:'PDF',jpg:'JPG',apple_wallet:'Apple Wallet',google_wallet:'Google Wallet'})[t]||t;
+  const tableStudents=(rows,empty)=>`<div class="table-wrap"><table class="table"><thead><tr><th>Aluno</th><th>Série/Turma</th><th>Login</th><th>Acessos</th><th>Último acesso</th></tr></thead><tbody>${rows.length?rows.map(r=>`<tr><td><b>${esc(r.nome_completo)}</b><br><small>${esc(r.matricula)}</small></td><td>${esc(r.serie)}ª ${esc(r.turma)}</td><td>${esc(r.usuario_acesso||'—')}</td><td>${Number(r.access_count||0)}</td><td>${fmtDT(r.last_access)}</td></tr>`).join(''):`<tr><td colspan="5"><div class="empty">${empty}</div></td></tr>`}</tbody></table></div>`;
+  $('#view').innerHTML=`
+   <div class="section-title"><div><h2>Relatório de Uso do Sistema</h2><p>Acompanhamento de adesão de alunos, famílias e distribuição das credenciais digitais.</p></div></div>
+   <div class="grid kpi-grid">
+    <div class="card kpi"><span>Alunos que já acessaram</span><b>${Number(sum.students_accessed||0)}</b><small>de ${Number(sum.total_students||students.length)} alunos</small></div>
+    <div class="card kpi"><span>Alunos que nunca acessaram</span><b>${Number(sum.students_never_accessed||0)}</b><small>relação nominal abaixo</small></div>
+    <div class="card kpi"><span>Famílias cadastradas</span><b>${Number(sum.families_registered||0)}</b><small>contas criadas no sistema</small></div>
+    <div class="card kpi"><span>Carteiras digitais geradas</span><b>${Number(sum.credentials_generated||0)}</b><small>${Number(sum.students_with_generated_credentials||0)} aluno(s) diferentes</small></div>
+   </div>
+   <div class="card card-pad" style="margin-bottom:16px"><div class="section-title"><div><h2>Alunos que já acessaram</h2><p>${accessed.length} aluno(s) com ao menos um login registrado.</p></div></div>${tableStudents(accessed,'Nenhum acesso de aluno registrado ainda.')}</div>
+   <div class="card card-pad" style="margin-bottom:16px"><div class="section-title"><div><h2>Alunos que nunca acessaram</h2><p>Alunos ativos sem login registrado.</p></div></div>${tableStudents(never,'Todos os alunos já acessaram o sistema.')}</div>
+   <div class="card card-pad" style="margin-bottom:16px"><div class="section-title"><div><h2>Famílias cadastradas</h2><p>Contas familiares, filhos vinculados e último acesso.</p></div></div><div class="table-wrap"><table class="table"><thead><tr><th>Responsável</th><th>E-mail</th><th>Filho(s)</th><th>Cadastro</th><th>Acessos</th><th>Último acesso</th></tr></thead><tbody>${families.length?families.map(r=>`<tr><td><b>${esc(r.full_name||'Família')}</b></td><td>${esc(r.email||'—')}</td><td>${esc(r.student_names||'Nenhum filho vinculado')}</td><td>${fmtDT(r.created_at)}</td><td>${Number(r.access_count||0)}</td><td>${fmtDT(r.last_access)}</td></tr>`).join(''):'<tr><td colspan="6"><div class="empty">Nenhuma família cadastrada.</div></td></tr>'}</tbody></table></div></div>
+   <div class="card card-pad"><div class="section-title"><div><h2>Carteiras Digitais Geradas</h2><p>Cada geração de PDF, JPG e, futuramente, Apple/Google Wallet é registrada com aluno, data e hora.</p></div></div><div class="table-wrap"><table class="table"><thead><tr><th>Aluno</th><th>Série/Turma</th><th>Formato</th><th>Data e hora</th><th>Gerado por</th></tr></thead><tbody>${credentials.length?credentials.map(r=>`<tr><td><b>${esc(r.nome_completo)}</b><br><small>${esc(r.matricula)}</small></td><td>${esc(r.serie)}ª ${esc(r.turma)}</td><td><span class="pill blue">${credLabel(r.generation_type)}</span></td><td>${fmtDT(r.generated_at)}</td><td>${esc(r.operator_name||r.source_role||'Sistema')}</td></tr>`).join(''):'<tr><td colspan="5"><div class="empty">Nenhuma carteira foi efetivamente gerada desde o início do rastreamento.</div></td></tr>'}</tbody></table></div></div>`;
+ }catch(e){console.error(e);$('#view').innerHTML=`<div class="card card-pad"><div class="auth-error">Não foi possível carregar o Relatório de Uso do Sistema.</div></div>`}
+}
+
 function renderUsuarios(){setTitle('Usuários'); const all=[...Object.entries(users).filter(([u,x])=>x.role!=='aluno').map(([u,x])=>({u,...x}))]; $('#view').innerHTML=`<div class="card card-pad"><div class="section-title"><div><h2>Usuários do sistema</h2><p>Versão de testes: credenciais locais; produção utilizará autenticação segura no servidor</p></div></div><div class="table-wrap"><table class="table"><thead><tr><th>Usuário</th><th>Nome</th><th>Perfil</th></tr></thead><tbody>${all.map(x=>`<tr><td>${x.u}</td><td>${esc(x.name)}</td><td><span class="pill blue">${roleLabel(x.role)}</span></td></tr>`).join('')}</tbody></table></div></div>`}
 function renderAuditoria(){setTitle('Auditoria'); $('#view').innerHTML=`<div class="card card-pad"><div class="section-title"><div><h2>Histórico de ações</h2><p>Rastreabilidade das operações</p></div></div><div class="table-wrap"><table class="table"><thead><tr><th>Data/Hora</th><th>Usuário</th><th>Ação</th><th>Detalhe</th></tr></thead><tbody>${audit.length?audit.map(a=>`<tr><td>${new Date(a.ts).toLocaleString('pt-BR')}</td><td>${esc(a.user)}</td><td>${a.action}</td><td>${esc(a.details)}</td></tr>`).join(''):'<tr><td colspan="4"><div class="empty">Nenhum evento.</div></td></tr>'}</tbody></table></div></div>`}
 function renderConfig(){setTitle('Configurações'); $('#view').innerHTML=`<div class="card card-pad" style="max-width:680px"><div class="section-title"><div><h2>Regras operacionais</h2><p>Configurações utilizadas pelo scanner e indicadores · versão de testes</p></div></div><div class="field"><label>Horário considerado atraso</label><input id="cfg-late" type="time" value="${settings.lateTime}"></div><div class="field"><label>Janela anti-repetição do QR (segundos)</label><input id="cfg-dup" type="number" min="2" max="30" value="${settings.duplicateSeconds}"></div><div class="field"><label>Duração da confirmação visual (ms)</label><input id="cfg-confirm" type="number" min="1000" max="5000" value="${settings.confirmMs}"></div><button class="btn btn-primary" id="cfg-save">Salvar configurações</button></div>`; $('#cfg-save').onclick=()=>{settings.lateTime=$('#cfg-late').value;settings.duplicateSeconds=Number($('#cfg-dup').value);settings.confirmMs=Number($('#cfg-confirm').value);localStorage.setItem(LS.settings,JSON.stringify(settings));addAudit('CONFIGURAÇÃO','Regras operacionais atualizadas');alert('Configurações salvas.')}}
