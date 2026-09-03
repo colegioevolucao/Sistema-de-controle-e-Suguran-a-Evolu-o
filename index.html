@@ -322,6 +322,92 @@ button{cursor:pointer}
 @media(max-width:900px){.study-kpis{grid-template-columns:repeat(2,1fr)}.study-question-head{display:none}.study-question-row{grid-template-columns:1fr 1fr}.study-question-row>*:first-child{grid-column:1/-1}.study-question-row .study-perf{justify-self:start}.study-question-row .study-remove{justify-self:end}.study-fields{grid-template-columns:1fr}}
 @media(max-width:560px){.study-card{padding:16px}.study-kpis{grid-template-columns:1fr 1fr}.study-choice{padding:9px 12px;font-size:13px}.study-question-row{grid-template-columns:1fr 1fr}.study-save{width:100%}}
 
+
+
+/* CORREÇÃO DEFINITIVA — SIDEBAR SEM SOBREPOSIÇÃO */
+.sidebar{
+  width:250px;
+  height:100vh;
+  max-height:100vh;
+  padding:20px 14px 14px;
+  position:fixed;
+  inset:0 auto 0 0;
+  z-index:20;
+  background:var(--navy);
+  color:var(--ink);
+  overflow:hidden;
+  display:grid;
+  grid-template-rows:auto auto minmax(0,1fr) auto;
+  align-content:stretch;
+}
+.sidebar .brand{
+  grid-row:1;
+  min-height:0;
+}
+.sidebar .side-user{
+  grid-row:2;
+  min-height:0;
+}
+#nav{
+  grid-row:3;
+  min-height:0;
+  height:100%;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  padding:0 4px 14px 0;
+  margin:0;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(255,255,255,.28) transparent;
+}
+#nav .nav-btn{
+  flex:0 0 auto;
+  min-height:44px;
+  position:relative;
+  z-index:1;
+}
+#nav::-webkit-scrollbar{width:6px}
+#nav::-webkit-scrollbar-track{background:transparent}
+#nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.28);border-radius:999px}
+.side-bottom{
+  grid-row:4;
+  position:relative!important;
+  inset:auto!important;
+  left:auto!important;
+  right:auto!important;
+  top:auto!important;
+  bottom:auto!important;
+  width:100%;
+  min-height:58px;
+  margin:0;
+  padding:10px 0 0;
+  border-top:1px solid var(--line);
+  background:var(--navy);
+  z-index:5;
+  align-self:end;
+}
+.side-bottom .nav-btn{
+  width:100%;
+  min-height:44px;
+  margin:0;
+  position:static!important;
+}
+#logout{
+  position:static!important;
+  inset:auto!important;
+  left:auto!important;
+  right:auto!important;
+  top:auto!important;
+  bottom:auto!important;
+}
+@media(max-width:900px){
+  .sidebar{
+    height:100dvh;
+    max-height:100dvh;
+    grid-template-rows:auto auto minmax(0,1fr) auto;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -599,7 +685,7 @@ $('#logout').onclick=logout; $('#mobile-menu').onclick=()=>$('#sidebar').classLi
 const navMap={
  aluno:[['carteira','▣','Minha Carteira'],['credencial-digital','🔒','Credencial Digital',true],['meu-historico','🔒','Meu Acesso',true],['meu-evoluir','◆','Espaço Evoluir'],['minha-rotina-estudos','▤','Minha Rotina de Estudos']],
  familia:[['familia-filhos','♟','Meus filhos'],['familia-acesso','↕','Acesso à Escola'],['familia-evoluir','◆','Espaço Evoluir'],['familia-aviso','✦','Avisar Portaria'],['familia-historico','◎','Meus avisos']],
- orientadora:[['espaco-evoluir','◆','Espaço Evoluir']],
+ orientadora:[['espaco-evoluir','◆','Espaço Evoluir'],['acompanhamento-estudos','▤','Acompanhamento de Estudos']],
  gestao:[['dashboard','⌂','Visão Geral'],['movimentacoes','↕','Movimentações'],['na-escola','●','Na Escola Agora'],['pendencias','!','Pendências'],['alunos','♟','Alunos'],['credenciais-digitais','◇','Credenciais Digitais'],['espaco-evoluir','◆','Espaço Evoluir'],['acompanhamento-estudos','▤','Acompanhamento de Estudos'],['acessos-portaria','▣','Porteiros e Portarias'],['avisos-familia','✦','Avisos da Família'],['atrasos','◷','Atrasos'],['relatorios','▤','Relatórios']],
  admin:[['dashboard','⌂','Visão Geral'],['movimentacoes','↕','Movimentações'],['na-escola','●','Na Escola Agora'],['pendencias','!','Pendências'],['cadastros','＋','Cadastros'],['alunos','♟','Alunos'],['credenciais-digitais','◇','Credenciais Digitais'],['espaco-evoluir','◆','Espaço Evoluir'],['acompanhamento-estudos','▤','Acompanhamento de Estudos'],['acessos-portaria','▣','Porteiros e Portarias'],['avisos-familia','✦','Avisos da Família'],['atrasos','◷','Atrasos'],['relatorios','▤','Relatórios'],['uso-sistema','◉','Relatório de Uso do Sistema'],['usuarios','♙','Usuários'],['auditoria','◎','Auditoria'],['config','⚙','Configurações']]
 };
@@ -611,7 +697,7 @@ function openShell(){
 }
 async function renderView(v){
  currentView=v;
- if(['gestao','admin'].includes(session?.role) && ['dashboard','movimentacoes','na-escola','pendencias','atrasos','relatorios','acompanhamento-estudos'].includes(v)){try{await syncAllRecords()}catch(e){console.error('Falha ao sincronizar gestão:',e)}} try{await syncExitPermissions()}catch(e){console.error('Falha ao sincronizar autorizações de saída:',e)} $$('#nav .nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===v)); $('#sidebar').classList.remove('open'); $('#top-actions').innerHTML='';
+ if((['gestao','admin'].includes(session?.role) || (session?.role==='orientadora' && v==='acompanhamento-estudos')) && ['dashboard','movimentacoes','na-escola','pendencias','atrasos','relatorios','acompanhamento-estudos'].includes(v)){try{await syncAllRecords()}catch(e){console.error('Falha ao sincronizar gestão:',e)}} try{await syncExitPermissions()}catch(e){console.error('Falha ao sincronizar autorizações de saída:',e)} $$('#nav .nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===v)); $('#sidebar').classList.remove('open'); $('#top-actions').innerHTML='';
  const map={carteira:renderCarteira,'minha-rotina-estudos':renderMinhaRotinaEstudos,'acompanhamento-estudos':renderAcompanhamentoEstudos,'credencial-digital':renderMinhaCredencial,'credenciais-digitais':renderCredenciaisDigitais,'meu-historico':renderMeuHistorico,'meu-evoluir':renderMeuEvoluir,'espaco-evoluir':renderEspacoEvoluir,'familia-filhos':renderFamiliaFilhos,'familia-acesso':renderFamiliaAcesso,'familia-evoluir':renderFamiliaEvoluir,'familia-aviso':renderFamiliaAviso,'familia-historico':renderFamiliaHistorico,dashboard:renderDashboard,movimentacoes:renderMovimentacoes,'na-escola':renderNaEscola,pendencias:renderPendencias,cadastros:renderCadastros,alunos:renderAlunos,atrasos:renderAtrasos,relatorios:renderRelatorios,'uso-sistema':renderSystemUsageReport,'acessos-portaria':renderAcessosPortaria,'avisos-familia':renderAvisosFamiliaHistorico,usuarios:renderUsuarios,auditoria:renderAuditoria,config:renderConfig};
  (map[v]||renderDashboard)();
 }
@@ -695,7 +781,7 @@ async function submitStudentStudy(){syncStudyInputs();const msg=$('#study-messag
 function studySummaryHtml(r){r=normalizeStudyRow(r);const qs=r.questions||[],total=studyTotalQuestions(qs),hits=studyTotalHits(qs),perf=total?Math.round(hits/total*100):null;return `<div class="study-summary"><h3>Resumo de hoje</h3>${r.studies.map(s=>`<div class="study-summary-line"><b>${studyAreaLabel(s.area)}</b> · ${esc(s.disciplina||'')} · ${esc(s.assunto||'')}</div>`).join('')}<div class="study-summary-line">${esc(studyFormatMethods(r.methods,r.other_method))}</div>${total?`<div class="study-summary-line"><b>${total}</b> questões · <b>${hits}</b> acertos · <b>${perf}%</b></div>`:''}${r.notes?'<div class="study-summary-line">📝 Anotação registrada</div>':''}</div>`}
 
 async function renderAcompanhamentoEstudos(){
- if(!['gestao','admin'].includes(session?.role)){renderDashboard();return}
+ if(!['gestao','admin','orientadora'].includes(session?.role)){renderDashboard();return}
  setTitle('Acompanhamento de Estudos');
  const today=todayISO();
  $('#view').innerHTML=`<div class="card card-pad"><div class="section-title"><div><h2>Acompanhamento de Estudos</h2><p>Controle diário dos registros de estudo e cruzamento com o Espaço Evoluir.</p></div><button class="btn btn-primary" id="study-m-pdf">Gerar PDF</button></div><div class="study-management-tabs"><button class="study-management-tab active" data-mode="today">Hoje</button><button class="study-management-tab" data-mode="week">Semana</button><button class="study-management-tab" data-mode="history">Histórico</button></div><div class="study-manage-top"><div class="filters"><input id="study-m-date" type="date" value="${today}"><select id="study-m-serie"><option value="">Todas as séries</option>${sortedSeries().map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}</select><select id="study-m-student"><option value="">Todos os alunos</option>${alphaStudents().map(s=>`<option value="${s.mat}">${esc(s.nome)}</option>`).join('')}</select><button class="btn btn-dark" id="study-m-refresh">Visualizar</button></div></div><div id="study-m-content"><div class="empty">Carregando...</div></div></div>`;
