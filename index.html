@@ -273,6 +273,15 @@ button{cursor:pointer}
 .movement-list{display:grid;gap:8px}.movement-item{display:grid;grid-template-columns:82px 120px 1fr 140px;gap:10px;align-items:center;padding:11px 12px;border:1px solid #edf0f4;border-radius:12px;background:#fff}.movement-item .mv-time{font-weight:800;color:#173f77}.movement-item .mv-type{font-weight:800}.movement-item .mv-type.entrada{color:#027a48}.movement-item .mv-type.retorno{color:#175cd3}.movement-item .mv-type.saida{color:#b42318}.movement-item .mv-meta{font-size:12px;color:#667085}.evoluir-family-status{padding:14px 15px;border-radius:14px;background:#f8fafc;border:1px solid #e4eaf2;margin-bottom:14px}.evoluir-family-status b{color:#173f77}.empty-soft{padding:28px 18px;text-align:center;color:#667085;background:#f8fafc;border:1px dashed #d6dee9;border-radius:14px}
 @media(max-width:760px){.family-overview-grid{grid-template-columns:1fr}.movement-item{grid-template-columns:72px 95px 1fr}.movement-item .mv-meta{grid-column:2/4}}
 
+/* PAINEL DE ESTUDOS — integração ao Acesso Seguro */
+.nav-btn.nav-disabled{opacity:.66;cursor:not-allowed!important;pointer-events:none}
+.nav-btn.nav-disabled:hover{background:transparent;color:#C7D0E0}
+.nav-btn.nav-disabled .nav-ico{color:var(--orange);font-size:16px}
+.nav-disabled-label{display:block;margin-top:2px;font-size:10px;color:#9AA8C0;font-weight:600}
+.studies-frame-wrap{background:#fff;border:1px solid #EAECF0;border-radius:18px;box-shadow:var(--shadow);overflow:hidden;min-height:720px}
+.studies-frame{width:100%;height:calc(100vh - 135px);min-height:720px;border:0;display:block;background:#F4F7FB}
+@media(max-width:760px){.studies-frame{height:calc(100vh - 95px);min-height:760px}.studies-frame-wrap{border-radius:12px}}
+
 </style>
 </head>
 <body>
@@ -548,21 +557,52 @@ $('#logout').onclick=logout; $('#mobile-menu').onclick=()=>$('#sidebar').classLi
 
 // SHELL
 const navMap={
- aluno:[['carteira','▣','Minha Carteira'],['credencial-digital','◇','Credencial Digital'],['meu-historico','↕','Meu Acesso'],['meu-evoluir','◆','Espaço Evoluir']],
+ aluno:[['carteira','▣','Minha Carteira',false],['credencial-digital','🔒','Credencial Digital',true],['meu-historico','🔒','Meu Acesso',true],['meu-evoluir','◆','Espaço Evoluir',false],['estudos-aluno','▤','Meus Estudos',false]],
  familia:[['familia-filhos','♟','Meus filhos'],['familia-acesso','↕','Acesso à Escola'],['familia-evoluir','◆','Espaço Evoluir'],['familia-aviso','✦','Avisar Portaria'],['familia-historico','◎','Meus avisos']],
  orientadora:[['espaco-evoluir','◆','Espaço Evoluir']],
- gestao:[['dashboard','⌂','Visão Geral'],['movimentacoes','↕','Movimentações'],['na-escola','●','Na Escola Agora'],['pendencias','!','Pendências'],['alunos','♟','Alunos'],['credenciais-digitais','◇','Credenciais Digitais'],['espaco-evoluir','◆','Espaço Evoluir'],['acessos-portaria','▣','Porteiros e Portarias'],['avisos-familia','✦','Avisos da Família'],['atrasos','◷','Atrasos'],['relatorios','▤','Relatórios']],
- admin:[['dashboard','⌂','Visão Geral'],['movimentacoes','↕','Movimentações'],['na-escola','●','Na Escola Agora'],['pendencias','!','Pendências'],['cadastros','＋','Cadastros'],['alunos','♟','Alunos'],['credenciais-digitais','◇','Credenciais Digitais'],['espaco-evoluir','◆','Espaço Evoluir'],['acessos-portaria','▣','Porteiros e Portarias'],['avisos-familia','✦','Avisos da Família'],['atrasos','◷','Atrasos'],['relatorios','▤','Relatórios'],['uso-sistema','◉','Relatório de Uso do Sistema'],['usuarios','♙','Usuários'],['auditoria','◎','Auditoria'],['config','⚙','Configurações']]
+ gestao:[['dashboard','⌂','Visão Geral'],['movimentacoes','↕','Movimentações'],['na-escola','●','Na Escola Agora'],['pendencias','!','Pendências'],['alunos','♟','Alunos'],['credenciais-digitais','◇','Credenciais Digitais'],['espaco-evoluir','◆','Espaço Evoluir'],['estudos-gestao','▤','Acompanhamento de Estudos'],['acessos-portaria','▣','Porteiros e Portarias'],['avisos-familia','✦','Avisos da Família'],['atrasos','◷','Atrasos'],['relatorios','▤','Relatórios']],
+ admin:[['dashboard','⌂','Visão Geral'],['movimentacoes','↕','Movimentações'],['na-escola','●','Na Escola Agora'],['pendencias','!','Pendências'],['cadastros','＋','Cadastros'],['alunos','♟','Alunos'],['credenciais-digitais','◇','Credenciais Digitais'],['espaco-evoluir','◆','Espaço Evoluir'],['estudos-gestao','▤','Acompanhamento de Estudos'],['acessos-portaria','▣','Porteiros e Portarias'],['avisos-familia','✦','Avisos da Família'],['atrasos','◷','Atrasos'],['relatorios','▤','Relatórios'],['uso-sistema','◉','Relatório de Uso do Sistema'],['usuarios','♙','Usuários'],['auditoria','◎','Auditoria'],['config','⚙','Configurações']]
 };
 function openShell(){
  $('#shell').classList.remove('hidden'); $('#side-name').textContent=session.name; $('#side-role').textContent=roleLabel(session.role); $('#today-label').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
- const nav=navMap[session.role]||[]; $('#nav').innerHTML=nav.map(([id,ic,l])=>`<button class="nav-btn" data-view="${id}"><span class="nav-ico">${ic}</span>${l}</button>`).join('');
- $$('#nav .nav-btn').forEach(b=>b.onclick=()=>renderView(b.dataset.view)); renderView(nav[0]?.[0]||'dashboard');
+ const nav=navMap[session.role]||[];
+ $('#nav').innerHTML=nav.map(([id,ic,l,disabled=false])=>`<button class="nav-btn ${disabled?'nav-disabled':''}" data-view="${id}" ${disabled?'disabled aria-disabled="true"':''}><span class="nav-ico">${ic}</span><span>${l}${disabled?'<small class="nav-disabled-label">Indisponível</small>':''}</span></button>`).join('');
+ $$('#nav .nav-btn:not(.nav-disabled)').forEach(b=>b.onclick=()=>renderView(b.dataset.view));
+ const first=nav.find(item=>!item[3]); renderView(first?.[0]||'dashboard');
+}
+async function getCurrentStudyStudentInfo(){
+ const mat=session?.mat||'';
+ const s=mat&&typeof studentByMat==='function'?studentByMat(mat):null;
+ const name=s?.nome||session?.name||'Aluno';
+ const className=[s?.serie,s?.turma].filter(Boolean).join(' ');
+ let effectiveMinutes=0;
+ try{
+  if(mat&&typeof getEvoluirHistory==='function'){
+   const today=typeof todayISO==='function'?todayISO():new Date().toISOString().slice(0,10);
+   const rows=await getEvoluirHistory(mat,today,today);
+   const row=Array.isArray(rows)?rows.find(r=>String(r.study_date||r.date||'')===today)||rows[0]:null;
+   effectiveMinutes=Number(row?.effective_minutes||row?.effectiveMinutes||0);
+  }
+ }catch(e){console.warn('[Estudos] Não foi possível obter o tempo efetivo do Espaço Evoluir:',e)}
+ return {mat,name,className,effectiveMinutes};
+}
+async function renderEstudosAluno(){
+ setTitle('Meus Estudos');
+ $('#view').innerHTML='<div class="card card-pad"><div class="empty">Carregando Painel de Estudos...</div></div>';
+ const info=await getCurrentStudyStudentInfo();
+ const today=typeof todayISO==='function'?todayISO():new Date().toISOString().slice(0,10);
+ const params=new URLSearchParams({embedded:'1',view:'student',date:today,name:info.name||'Aluno',className:info.className||'',mat:info.mat||'',effectiveMinutes:String(info.effectiveMinutes||0)});
+ $('#view').innerHTML=`<div class="studies-frame-wrap"><iframe class="studies-frame" title="Meus Estudos" src="./estudos/index.html?${params.toString()}"></iframe></div>`;
+}
+function renderEstudosGestao(){
+ setTitle('Acompanhamento de Estudos');
+ const params=new URLSearchParams({embedded:'1',view:'management'});
+ $('#view').innerHTML=`<div class="studies-frame-wrap"><iframe class="studies-frame" title="Acompanhamento de Estudos" src="./estudos/index.html?${params.toString()}"></iframe></div>`;
 }
 async function renderView(v){
  currentView=v;
  if(['gestao','admin'].includes(session?.role) && ['dashboard','movimentacoes','na-escola','pendencias','atrasos','relatorios'].includes(v)){try{await syncAllRecords()}catch(e){console.error('Falha ao sincronizar gestão:',e)}} try{await syncExitPermissions()}catch(e){console.error('Falha ao sincronizar autorizações de saída:',e)} $$('#nav .nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===v)); $('#sidebar').classList.remove('open'); $('#top-actions').innerHTML='';
- const map={carteira:renderCarteira,'credencial-digital':renderMinhaCredencial,'credenciais-digitais':renderCredenciaisDigitais,'meu-historico':renderMeuHistorico,'meu-evoluir':renderMeuEvoluir,'espaco-evoluir':renderEspacoEvoluir,'familia-filhos':renderFamiliaFilhos,'familia-acesso':renderFamiliaAcesso,'familia-evoluir':renderFamiliaEvoluir,'familia-aviso':renderFamiliaAviso,'familia-historico':renderFamiliaHistorico,dashboard:renderDashboard,movimentacoes:renderMovimentacoes,'na-escola':renderNaEscola,pendencias:renderPendencias,cadastros:renderCadastros,alunos:renderAlunos,atrasos:renderAtrasos,relatorios:renderRelatorios,'uso-sistema':renderSystemUsageReport,'acessos-portaria':renderAcessosPortaria,'avisos-familia':renderAvisosFamiliaHistorico,usuarios:renderUsuarios,auditoria:renderAuditoria,config:renderConfig};
+ const map={carteira:renderCarteira,'credencial-digital':renderMinhaCredencial,'credenciais-digitais':renderCredenciaisDigitais,'meu-historico':renderMeuHistorico,'meu-evoluir':renderMeuEvoluir,'espaco-evoluir':renderEspacoEvoluir,'estudos-aluno':renderEstudosAluno,'estudos-gestao':renderEstudosGestao,'familia-filhos':renderFamiliaFilhos,'familia-acesso':renderFamiliaAcesso,'familia-evoluir':renderFamiliaEvoluir,'familia-aviso':renderFamiliaAviso,'familia-historico':renderFamiliaHistorico,dashboard:renderDashboard,movimentacoes:renderMovimentacoes,'na-escola':renderNaEscola,pendencias:renderPendencias,cadastros:renderCadastros,alunos:renderAlunos,atrasos:renderAtrasos,relatorios:renderRelatorios,'uso-sistema':renderSystemUsageReport,'acessos-portaria':renderAcessosPortaria,'avisos-familia':renderAvisosFamiliaHistorico,usuarios:renderUsuarios,auditoria:renderAuditoria,config:renderConfig};
  (map[v]||renderDashboard)();
 }
 function setTitle(t){$('#page-title').textContent=t}
