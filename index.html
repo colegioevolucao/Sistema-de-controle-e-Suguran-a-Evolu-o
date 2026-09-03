@@ -273,14 +273,54 @@ button{cursor:pointer}
 .movement-list{display:grid;gap:8px}.movement-item{display:grid;grid-template-columns:82px 120px 1fr 140px;gap:10px;align-items:center;padding:11px 12px;border:1px solid #edf0f4;border-radius:12px;background:#fff}.movement-item .mv-time{font-weight:800;color:#173f77}.movement-item .mv-type{font-weight:800}.movement-item .mv-type.entrada{color:#027a48}.movement-item .mv-type.retorno{color:#175cd3}.movement-item .mv-type.saida{color:#b42318}.movement-item .mv-meta{font-size:12px;color:#667085}.evoluir-family-status{padding:14px 15px;border-radius:14px;background:#f8fafc;border:1px solid #e4eaf2;margin-bottom:14px}.evoluir-family-status b{color:#173f77}.empty-soft{padding:28px 18px;text-align:center;color:#667085;background:#f8fafc;border:1px dashed #d6dee9;border-radius:14px}
 @media(max-width:760px){.family-overview-grid{grid-template-columns:1fr}.movement-item{grid-template-columns:72px 95px 1fr}.movement-item .mv-meta{grid-column:2/4}}
 
-/* PAINEL DE ESTUDOS — integração ao Acesso Seguro */
-.nav-btn.nav-disabled{opacity:.66;cursor:not-allowed!important;pointer-events:none}
+
+
+/* MINHA ROTINA DE ESTUDOS / ACOMPANHAMENTO — integração nativa */
+.nav-btn.nav-disabled{opacity:.58;cursor:not-allowed!important;pointer-events:none}
 .nav-btn.nav-disabled:hover{background:transparent;color:#C7D0E0}
-.nav-btn.nav-disabled .nav-ico{color:var(--orange);font-size:16px}
-.nav-disabled-label{display:block;margin-top:2px;font-size:10px;color:#9AA8C0;font-weight:600}
-.studies-frame-wrap{background:#fff;border:1px solid #EAECF0;border-radius:18px;box-shadow:var(--shadow);overflow:hidden;min-height:720px}
-.studies-frame{width:100%;height:calc(100vh - 135px);min-height:720px;border:0;display:block;background:#F4F7FB}
-@media(max-width:760px){.studies-frame{height:calc(100vh - 95px);min-height:760px}.studies-frame-wrap{border-radius:12px}}
+.nav-btn.nav-disabled .nav-lock{color:var(--orange);font-size:14px}
+.study-page{max-width:1180px;margin:0 auto;display:grid;gap:16px}
+.study-card{padding:22px}
+.study-card .section-title{margin-bottom:18px}
+.study-step{padding:18px 0;border-top:1px solid #edf0f4}
+.study-step:first-of-type{border-top:0;padding-top:2px}
+.study-step-title{font-size:15px;font-weight:850;color:#174ea6;margin:0 0 13px}
+.study-area-row,.study-method-row{display:flex;flex-wrap:wrap;gap:9px}
+.study-choice{border:1px solid #d0d9e6;background:#fff;color:#344054;border-radius:999px;padding:10px 15px;font-weight:700;cursor:pointer;transition:.15s}
+.study-choice:hover{border-color:#8ba9cf;background:#f8fbff}
+.study-choice.selected{background:#0d7f98;color:#fff;border-color:#0d7f98;box-shadow:0 7px 16px rgba(13,127,152,.15)}
+.study-entry{border:1px solid #e4eaf2;border-radius:14px;background:#fbfcfe;padding:14px;margin:10px 0}
+.study-entry-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.study-entry-head b{color:#173f77;font-size:13px}
+.study-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.study-fields .field{margin:0}.study-fields .field label,.study-question-grid label,.study-note-label{display:block;font-size:11px;color:#667085;margin-bottom:6px}
+.study-fields input,.study-question-grid input,.study-note{width:100%;border:1px solid #d0d9e6;border-radius:11px;background:#fff;color:#344054;padding:11px 12px;outline:none}
+.study-fields input:focus,.study-question-grid input:focus,.study-note:focus{border-color:#4d8bf5;box-shadow:0 0 0 3px rgba(77,139,245,.10)}
+.study-link{border:0;background:transparent;color:#175cd3;font-weight:800;padding:8px 0;cursor:pointer}
+.study-link:disabled{opacity:.45;cursor:not-allowed}
+.study-remove{border:0;background:#fff0ee;color:#b42318;border-radius:9px;padding:7px 9px;font-weight:800;cursor:pointer}
+.study-other{margin-top:10px;max-width:520px}
+.study-questions{margin-top:14px;border:1px solid #e4eaf2;border-radius:14px;overflow:hidden;background:#fff}
+.study-question-head{display:grid;grid-template-columns:minmax(180px,1fr) 110px 110px 110px 40px;gap:8px;padding:10px 12px;background:#f8fafc;color:#667085;font-size:11px;font-weight:800}
+.study-question-row{display:grid;grid-template-columns:minmax(180px,1fr) 110px 110px 110px 40px;gap:8px;align-items:center;padding:10px 12px;border-top:1px solid #edf0f4}
+.study-question-grid input{padding:9px 10px}.study-perf{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:6px 9px;font-size:12px;font-weight:850;background:#eff8ff;color:#175cd3;min-width:58px}
+.study-note{min-height:105px;resize:vertical;line-height:1.45}
+.study-savebar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:4px}
+.study-save{min-width:220px;background:var(--orange);color:#fff;border:0;border-radius:12px;padding:13px 20px;font-weight:850;font-size:15px;cursor:pointer;box-shadow:0 8px 18px rgba(242,121,46,.20)}
+.study-message{font-size:13px;font-weight:800}.study-message.ok{color:#027a48}.study-message.err{color:#b42318}
+.study-summary{border:1px solid #e4eaf2;border-radius:14px;background:#f8fafc;padding:14px 16px;margin-top:16px}
+.study-summary h3{font-size:14px;color:#173f77;margin:0 0 10px}.study-summary-line{padding:5px 0;font-size:13px;color:#475467}.study-summary-line b{color:#173f77}
+.study-empty-note{font-size:12px;color:#667085;margin-top:7px}
+.study-management-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.study-management-tab{border:1px solid #d5deea;background:#fff;color:#173f77;border-radius:10px;padding:9px 14px;font-weight:800;cursor:pointer}
+.study-management-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.study-manage-top{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.study-manage-top .filters{margin:0;flex:1}
+.study-kpis{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:16px}
+.study-status-ok{color:#027a48;font-weight:850}.study-status-no{color:#b42318;font-weight:850}.study-muted{color:#667085}
+.study-detail{display:grid;gap:11px}.study-detail-block{border:1px solid #e4eaf2;border-radius:12px;padding:12px;background:#fafbfd}.study-detail-block h4{margin:0 0 7px;color:#173f77}.study-detail-block p{margin:4px 0;font-size:13px;color:#475467}
+@media(max-width:900px){.study-kpis{grid-template-columns:repeat(2,1fr)}.study-question-head{display:none}.study-question-row{grid-template-columns:1fr 1fr}.study-question-row>*:first-child{grid-column:1/-1}.study-question-row .study-perf{justify-self:start}.study-question-row .study-remove{justify-self:end}.study-fields{grid-template-columns:1fr}}
+@media(max-width:560px){.study-card{padding:16px}.study-kpis{grid-template-columns:1fr 1fr}.study-choice{padding:9px 12px;font-size:13px}.study-question-row{grid-template-columns:1fr 1fr}.study-save{width:100%}}
 
 </style>
 </head>
@@ -557,55 +597,137 @@ $('#logout').onclick=logout; $('#mobile-menu').onclick=()=>$('#sidebar').classLi
 
 // SHELL
 const navMap={
- aluno:[['carteira','▣','Minha Carteira',false],['credencial-digital','🔒','Credencial Digital',true],['meu-historico','🔒','Meu Acesso',true],['meu-evoluir','◆','Espaço Evoluir',false],['estudos-aluno','▤','Meus Estudos',false]],
+ aluno:[['carteira','▣','Minha Carteira'],['credencial-digital','🔒','Credencial Digital',true],['meu-historico','🔒','Meu Acesso',true],['meu-evoluir','◆','Espaço Evoluir'],['minha-rotina-estudos','▤','Minha Rotina de Estudos']],
  familia:[['familia-filhos','♟','Meus filhos'],['familia-acesso','↕','Acesso à Escola'],['familia-evoluir','◆','Espaço Evoluir'],['familia-aviso','✦','Avisar Portaria'],['familia-historico','◎','Meus avisos']],
  orientadora:[['espaco-evoluir','◆','Espaço Evoluir']],
- gestao:[['dashboard','⌂','Visão Geral'],['movimentacoes','↕','Movimentações'],['na-escola','●','Na Escola Agora'],['pendencias','!','Pendências'],['alunos','♟','Alunos'],['credenciais-digitais','◇','Credenciais Digitais'],['espaco-evoluir','◆','Espaço Evoluir'],['estudos-gestao','▤','Acompanhamento de Estudos'],['acessos-portaria','▣','Porteiros e Portarias'],['avisos-familia','✦','Avisos da Família'],['atrasos','◷','Atrasos'],['relatorios','▤','Relatórios']],
- admin:[['dashboard','⌂','Visão Geral'],['movimentacoes','↕','Movimentações'],['na-escola','●','Na Escola Agora'],['pendencias','!','Pendências'],['cadastros','＋','Cadastros'],['alunos','♟','Alunos'],['credenciais-digitais','◇','Credenciais Digitais'],['espaco-evoluir','◆','Espaço Evoluir'],['estudos-gestao','▤','Acompanhamento de Estudos'],['acessos-portaria','▣','Porteiros e Portarias'],['avisos-familia','✦','Avisos da Família'],['atrasos','◷','Atrasos'],['relatorios','▤','Relatórios'],['uso-sistema','◉','Relatório de Uso do Sistema'],['usuarios','♙','Usuários'],['auditoria','◎','Auditoria'],['config','⚙','Configurações']]
+ gestao:[['dashboard','⌂','Visão Geral'],['movimentacoes','↕','Movimentações'],['na-escola','●','Na Escola Agora'],['pendencias','!','Pendências'],['alunos','♟','Alunos'],['credenciais-digitais','◇','Credenciais Digitais'],['espaco-evoluir','◆','Espaço Evoluir'],['acompanhamento-estudos','▤','Acompanhamento de Estudos'],['acessos-portaria','▣','Porteiros e Portarias'],['avisos-familia','✦','Avisos da Família'],['atrasos','◷','Atrasos'],['relatorios','▤','Relatórios']],
+ admin:[['dashboard','⌂','Visão Geral'],['movimentacoes','↕','Movimentações'],['na-escola','●','Na Escola Agora'],['pendencias','!','Pendências'],['cadastros','＋','Cadastros'],['alunos','♟','Alunos'],['credenciais-digitais','◇','Credenciais Digitais'],['espaco-evoluir','◆','Espaço Evoluir'],['acompanhamento-estudos','▤','Acompanhamento de Estudos'],['acessos-portaria','▣','Porteiros e Portarias'],['avisos-familia','✦','Avisos da Família'],['atrasos','◷','Atrasos'],['relatorios','▤','Relatórios'],['uso-sistema','◉','Relatório de Uso do Sistema'],['usuarios','♙','Usuários'],['auditoria','◎','Auditoria'],['config','⚙','Configurações']]
 };
 function openShell(){
  $('#shell').classList.remove('hidden'); $('#side-name').textContent=session.name; $('#side-role').textContent=roleLabel(session.role); $('#today-label').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
  const nav=navMap[session.role]||[];
- $('#nav').innerHTML=nav.map(([id,ic,l,disabled=false])=>`<button class="nav-btn ${disabled?'nav-disabled':''}" data-view="${id}" ${disabled?'disabled aria-disabled="true"':''}><span class="nav-ico">${ic}</span><span>${l}${disabled?'<small class="nav-disabled-label">Indisponível</small>':''}</span></button>`).join('');
- $$('#nav .nav-btn:not(.nav-disabled)').forEach(b=>b.onclick=()=>renderView(b.dataset.view));
- const first=nav.find(item=>!item[3]); renderView(first?.[0]||'dashboard');
-}
-async function getCurrentStudyStudentInfo(){
- const mat=session?.mat||'';
- const s=mat&&typeof studentByMat==='function'?studentByMat(mat):null;
- const name=s?.nome||session?.name||'Aluno';
- const className=[s?.serie,s?.turma].filter(Boolean).join(' ');
- let effectiveMinutes=0;
- try{
-  if(mat&&typeof getEvoluirHistory==='function'){
-   const today=typeof todayISO==='function'?todayISO():new Date().toISOString().slice(0,10);
-   const rows=await getEvoluirHistory(mat,today,today);
-   const row=Array.isArray(rows)?rows.find(r=>String(r.study_date||r.date||'')===today)||rows[0]:null;
-   effectiveMinutes=Number(row?.effective_minutes||row?.effectiveMinutes||0);
-  }
- }catch(e){console.warn('[Estudos] Não foi possível obter o tempo efetivo do Espaço Evoluir:',e)}
- return {mat,name,className,effectiveMinutes};
-}
-async function renderEstudosAluno(){
- setTitle('Meus Estudos');
- $('#view').innerHTML='<div class="card card-pad"><div class="empty">Carregando Painel de Estudos...</div></div>';
- const info=await getCurrentStudyStudentInfo();
- const today=typeof todayISO==='function'?todayISO():new Date().toISOString().slice(0,10);
- const params=new URLSearchParams({embedded:'1',view:'student',date:today,name:info.name||'Aluno',className:info.className||'',mat:info.mat||'',effectiveMinutes:String(info.effectiveMinutes||0)});
- $('#view').innerHTML=`<div class="studies-frame-wrap"><iframe class="studies-frame" title="Meus Estudos" src="./estudos/index.html?${params.toString()}"></iframe></div>`;
-}
-function renderEstudosGestao(){
- setTitle('Acompanhamento de Estudos');
- const params=new URLSearchParams({embedded:'1',view:'management'});
- $('#view').innerHTML=`<div class="studies-frame-wrap"><iframe class="studies-frame" title="Acompanhamento de Estudos" src="./estudos/index.html?${params.toString()}"></iframe></div>`;
+ $('#nav').innerHTML=nav.map(([id,ic,l,disabled])=>`<button class="nav-btn${disabled?' nav-disabled':''}" data-view="${id}" ${disabled?'disabled aria-disabled="true"':''}><span class="nav-ico${disabled?' nav-lock':''}">${ic}</span><span>${l}${disabled?'<small style="display:block;font-size:9px;color:#8fa1bc;margin-top:2px">Indisponível</small>':''}</span></button>`).join('');
+ $$('#nav .nav-btn:not(.nav-disabled)').forEach(b=>b.onclick=()=>renderView(b.dataset.view)); renderView(nav.find(x=>!x[3])?.[0]||'dashboard');
 }
 async function renderView(v){
  currentView=v;
- if(['gestao','admin'].includes(session?.role) && ['dashboard','movimentacoes','na-escola','pendencias','atrasos','relatorios'].includes(v)){try{await syncAllRecords()}catch(e){console.error('Falha ao sincronizar gestão:',e)}} try{await syncExitPermissions()}catch(e){console.error('Falha ao sincronizar autorizações de saída:',e)} $$('#nav .nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===v)); $('#sidebar').classList.remove('open'); $('#top-actions').innerHTML='';
- const map={carteira:renderCarteira,'credencial-digital':renderMinhaCredencial,'credenciais-digitais':renderCredenciaisDigitais,'meu-historico':renderMeuHistorico,'meu-evoluir':renderMeuEvoluir,'espaco-evoluir':renderEspacoEvoluir,'estudos-aluno':renderEstudosAluno,'estudos-gestao':renderEstudosGestao,'familia-filhos':renderFamiliaFilhos,'familia-acesso':renderFamiliaAcesso,'familia-evoluir':renderFamiliaEvoluir,'familia-aviso':renderFamiliaAviso,'familia-historico':renderFamiliaHistorico,dashboard:renderDashboard,movimentacoes:renderMovimentacoes,'na-escola':renderNaEscola,pendencias:renderPendencias,cadastros:renderCadastros,alunos:renderAlunos,atrasos:renderAtrasos,relatorios:renderRelatorios,'uso-sistema':renderSystemUsageReport,'acessos-portaria':renderAcessosPortaria,'avisos-familia':renderAvisosFamiliaHistorico,usuarios:renderUsuarios,auditoria:renderAuditoria,config:renderConfig};
+ if(['gestao','admin'].includes(session?.role) && ['dashboard','movimentacoes','na-escola','pendencias','atrasos','relatorios','acompanhamento-estudos'].includes(v)){try{await syncAllRecords()}catch(e){console.error('Falha ao sincronizar gestão:',e)}} try{await syncExitPermissions()}catch(e){console.error('Falha ao sincronizar autorizações de saída:',e)} $$('#nav .nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===v)); $('#sidebar').classList.remove('open'); $('#top-actions').innerHTML='';
+ const map={carteira:renderCarteira,'minha-rotina-estudos':renderMinhaRotinaEstudos,'acompanhamento-estudos':renderAcompanhamentoEstudos,'credencial-digital':renderMinhaCredencial,'credenciais-digitais':renderCredenciaisDigitais,'meu-historico':renderMeuHistorico,'meu-evoluir':renderMeuEvoluir,'espaco-evoluir':renderEspacoEvoluir,'familia-filhos':renderFamiliaFilhos,'familia-acesso':renderFamiliaAcesso,'familia-evoluir':renderFamiliaEvoluir,'familia-aviso':renderFamiliaAviso,'familia-historico':renderFamiliaHistorico,dashboard:renderDashboard,movimentacoes:renderMovimentacoes,'na-escola':renderNaEscola,pendencias:renderPendencias,cadastros:renderCadastros,alunos:renderAlunos,atrasos:renderAtrasos,relatorios:renderRelatorios,'uso-sistema':renderSystemUsageReport,'acessos-portaria':renderAcessosPortaria,'avisos-familia':renderAvisosFamiliaHistorico,usuarios:renderUsuarios,auditoria:renderAuditoria,config:renderConfig};
  (map[v]||renderDashboard)();
 }
 function setTitle(t){$('#page-title').textContent=t}
+
+
+// MINHA ROTINA DE ESTUDOS — módulo nativo do Acesso Seguro
+const STUDY_METHODS=[['video','Aula/Videoaula'],['leitura','Leitura'],['questoes','Resolução de questões'],['outro','Outro']];
+let studyDraft={studies:[],methods:[],other_method:'',questions:[],notes:''};
+let studyManagementMode='today';
+let studyManagementRows=[];
+
+function studyAccessCode(mat){const s=(session?.mat===mat?session:studentByMat(mat));return String(s?.codigo||'').trim()}
+async function getStudyDay(mat,date){const r=await supabaseRpc('get_study_day',{p_matricula:mat,p_study_date:date,p_codigo_acesso:studyAccessCode(mat)});return Array.isArray(r)?(r[0]||null):r}
+async function saveStudyDay(payload){return await supabaseRpc('save_study_day',{p_matricula:payload.matricula,p_study_date:payload.study_date,p_studies:payload.studies,p_methods:payload.methods,p_other_method:payload.other_method||'',p_questions:payload.questions,p_notes:payload.notes||'',p_codigo_acesso:studyAccessCode(payload.matricula)})}
+function getStudyManagementKey(){let k=sessionStorage.getItem('evolucao_study_management_key')||'';if(!k){k=(prompt('Informe a chave de acesso do Acompanhamento de Estudos:')||'').trim();if(k)sessionStorage.setItem('evolucao_study_management_key',k)}return k}
+async function getStudyManagement(from,to,mat=null){const key=getStudyManagementKey();if(!key)throw new Error('STUDY_MANAGEMENT_KEY_REQUIRED');try{return await supabaseRpc('get_study_management',{p_from:from,p_to:to,p_matricula:mat||null,p_management_key:key})||[]}catch(e){if(String(e?.message||'').includes('STUDY_MANAGEMENT_ACCESS_DENIED'))sessionStorage.removeItem('evolucao_study_management_key');throw e}}
+function studyBlankStudy(){return {area:'',disciplina:'',assunto:''}}
+function studyBlankQuestion(){return {disciplina:'',questoes:'',acertos:''}}
+function studyAreaLabel(a){return ({natureza:'Natureza',humanas:'Humanas',linguagens:'Linguagens',matematica:'Matemática'})[a]||a||'—'}
+function studyPerf(q){const n=Number(q.questoes||0),a=Number(q.acertos||0);return n>0?Math.max(0,Math.min(100,Math.round(a/n*100))):null}
+function studyTotalQuestions(qs){return (qs||[]).reduce((n,q)=>n+Number(q.questoes||0),0)}
+function studyTotalHits(qs){return (qs||[]).reduce((n,q)=>n+Number(q.acertos||0),0)}
+function studyFormatMethods(methods,other=''){const labels=STUDY_METHODS.filter(([k])=>(methods||[]).includes(k)).map(([k,l])=>k==='outro'&&other?`${l}: ${other}`:l);return labels.join(' · ')||'—'}
+function studyMonday(dateStr){const d=new Date(dateStr+'T12:00:00');const day=d.getDay()||7;d.setDate(d.getDate()-day+1);return localDateISO(d)}
+function studySunday(dateStr){const d=new Date(studyMonday(dateStr)+'T12:00:00');d.setDate(d.getDate()+6);return localDateISO(d)}
+function studySafeArray(v){return Array.isArray(v)?v:[]}
+function normalizeStudyRow(r){return {...r,studies:studySafeArray(r.studies),methods:studySafeArray(r.methods),questions:studySafeArray(r.questions)}}
+
+async function renderMinhaRotinaEstudos(){
+ if(session?.role!=='aluno'){renderDashboard();return}
+ setTitle('Minha Rotina de Estudos');
+ $('#view').innerHTML='<div class="study-page"><div class="card study-card"><div class="empty">Carregando...</div></div></div>';
+ let existing=null;
+ try{existing=await getStudyDay(session.mat,todayISO())}catch(e){console.warn('Módulo de estudos ainda não conectado ao banco:',e)}
+ studyDraft=existing?{studies:studySafeArray(existing.studies),methods:studySafeArray(existing.methods),other_method:existing.other_method||'',questions:studySafeArray(existing.questions),notes:existing.notes||''}:{studies:[studyBlankStudy()],methods:[],other_method:'',questions:[],notes:''};
+ if(!studyDraft.studies.length)studyDraft.studies=[studyBlankStudy()];
+ drawStudentStudyPage(existing);
+}
+function drawStudentStudyPage(existing=null){
+ $('#view').innerHTML=`<div class="study-page"><div class="card study-card">
+   <div class="section-title"><div><h2>Meu Estudo Hoje</h2></div></div>
+   <div class="study-step"><div class="study-step-title">1. O que você estudou?</div><div id="study-entries"></div><button class="study-link" id="study-add-entry">+ Adicionar outro estudo</button></div>
+   <div class="study-step"><div class="study-step-title">2. Como você estudou?</div><div class="study-method-row" id="study-methods">${STUDY_METHODS.map(([k,l])=>`<button class="study-choice${studyDraft.methods.includes(k)?' selected':''}" data-method="${k}">${l}</button>`).join('')}</div><div id="study-other-wrap" class="study-other ${studyDraft.methods.includes('outro')?'':'hidden'}"><input id="study-other" value="${esc(studyDraft.other_method||'')}" placeholder="Escreva aqui..." style="width:100%;border:1px solid #d0d9e6;border-radius:11px;padding:11px 12px"></div></div>
+   <div class="study-step ${studyDraft.methods.includes('questoes')?'':'hidden'}" id="study-questions-step"><div class="study-step-title">3. Questões resolvidas hoje</div><div class="study-questions"><div class="study-question-head"><span>Disciplina</span><span>Questões</span><span>Acertos</span><span>Desempenho</span><span></span></div><div id="study-question-rows"></div><button class="study-link" id="study-add-question" style="margin:6px 12px 10px">+ Adicionar disciplina</button></div></div>
+   <div class="study-step"><div class="study-step-title">${studyDraft.methods.includes('questoes')?'4':'3'}. Minhas Anotações</div><label class="study-note-label">O que preciso revisar? / Onde parei? / Observação para o próximo estudo</label><textarea class="study-note" id="study-notes" placeholder="Digite aqui...">${esc(studyDraft.notes||'')}</textarea></div>
+   <div class="study-savebar"><button class="study-save" id="study-save">Salvar meu estudo</button><span class="study-message" id="study-message"></span></div>
+   <div id="study-summary-wrap">${existing?studySummaryHtml(existing):''}</div>
+ </div></div>`;
+ drawStudyEntries(); drawStudyQuestions();
+ $('#study-add-entry').onclick=()=>{syncStudyInputs();if(studyDraft.studies.length<3){studyDraft.studies.push(studyBlankStudy());drawStudyEntries()}updateStudyAddButton()};
+ $$('#study-methods .study-choice').forEach(b=>b.onclick=()=>{syncStudyInputs();const k=b.dataset.method,i=studyDraft.methods.indexOf(k);if(i>=0)studyDraft.methods.splice(i,1);else studyDraft.methods.push(k);if(k==='questoes'&&!studyDraft.methods.includes('questoes'))studyDraft.questions=[];drawStudentStudyPage(null)});
+ $('#study-add-question')?.addEventListener('click',()=>{syncStudyInputs();studyDraft.questions.push(studyBlankQuestion());drawStudyQuestions()});
+ $('#study-save').onclick=submitStudentStudy;
+ updateStudyAddButton();
+}
+function drawStudyEntries(){
+ const root=$('#study-entries');if(!root)return;
+ root.innerHTML=studyDraft.studies.map((s,i)=>`<div class="study-entry" data-study-index="${i}"><div class="study-entry-head"><b>Estudo ${i+1}</b>${i?`<button class="study-remove" data-remove-study="${i}">Remover</button>`:''}</div><div class="study-area-row">${[['natureza','Natureza'],['humanas','Humanas'],['linguagens','Linguagens'],['matematica','Matemática']].map(([k,l])=>`<button class="study-choice${s.area===k?' selected':''}" data-area="${k}" data-i="${i}">${l}</button>`).join('')}</div><div class="study-fields"><div class="field"><label>Disciplina</label><input class="study-discipline" data-i="${i}" value="${esc(s.disciplina||'')}" placeholder="Digite a disciplina..."></div><div class="field"><label>Assunto</label><input class="study-subject" data-i="${i}" value="${esc(s.assunto||'')}" placeholder="Digite o assunto..."></div></div></div>`).join('');
+ $$('[data-area]').forEach(b=>b.onclick=()=>{syncStudyInputs();studyDraft.studies[Number(b.dataset.i)].area=b.dataset.area;drawStudyEntries()});
+ $$('[data-remove-study]').forEach(b=>b.onclick=()=>{syncStudyInputs();studyDraft.studies.splice(Number(b.dataset.removeStudy),1);if(!studyDraft.studies.length)studyDraft.studies=[studyBlankStudy()];drawStudyEntries();updateStudyAddButton()});
+}
+function updateStudyAddButton(){const b=$('#study-add-entry');if(b){b.disabled=studyDraft.studies.length>=3;b.textContent=studyDraft.studies.length>=3?'Limite de 3 estudos atingido':'+ Adicionar outro estudo'}}
+function drawStudyQuestions(){const root=$('#study-question-rows');if(!root)return;root.innerHTML=studyDraft.questions.map((q,i)=>`<div class="study-question-row" data-q-index="${i}"><input class="study-q-disc" data-i="${i}" value="${esc(q.disciplina||'')}" placeholder="Disciplina"><input type="number" min="0" class="study-q-total" data-i="${i}" value="${q.questoes??''}" placeholder="0"><input type="number" min="0" class="study-q-hits" data-i="${i}" value="${q.acertos??''}" placeholder="0"><span class="study-perf">${studyPerf(q)===null?'—':studyPerf(q)+'%'}</span><button class="study-remove" data-remove-q="${i}">×</button></div>`).join('');$$('.study-q-total,.study-q-hits').forEach(inp=>inp.oninput=()=>{syncStudyInputs();drawStudyQuestions()});$$('[data-remove-q]').forEach(b=>b.onclick=()=>{syncStudyInputs();studyDraft.questions.splice(Number(b.dataset.removeQ),1);drawStudyQuestions()})}
+function syncStudyInputs(){
+ $$('.study-discipline').forEach(x=>{if(studyDraft.studies[Number(x.dataset.i)])studyDraft.studies[Number(x.dataset.i)].disciplina=x.value.trim()});$$('.study-subject').forEach(x=>{if(studyDraft.studies[Number(x.dataset.i)])studyDraft.studies[Number(x.dataset.i)].assunto=x.value.trim()});
+ $$('.study-q-disc').forEach(x=>{if(studyDraft.questions[Number(x.dataset.i)])studyDraft.questions[Number(x.dataset.i)].disciplina=x.value.trim()});$$('.study-q-total').forEach(x=>{if(studyDraft.questions[Number(x.dataset.i)])studyDraft.questions[Number(x.dataset.i)].questoes=x.value});$$('.study-q-hits').forEach(x=>{if(studyDraft.questions[Number(x.dataset.i)])studyDraft.questions[Number(x.dataset.i)].acertos=x.value});
+ if($('#study-other'))studyDraft.other_method=$('#study-other').value.trim();if($('#study-notes'))studyDraft.notes=$('#study-notes').value.trim();
+}
+function validateStudyDraft(){
+ const validStudies=studyDraft.studies.filter(s=>s.area||s.disciplina||s.assunto);if(!validStudies.length)return 'Registre pelo menos um estudo.';for(const s of validStudies){if(!s.area)return 'Selecione a área do conhecimento em cada estudo.';if(!s.disciplina)return 'Informe a disciplina em cada estudo.';if(!s.assunto)return 'Informe o assunto estudado.'}
+ if(!studyDraft.methods.length)return 'Selecione como você estudou.';if(studyDraft.methods.includes('outro')&&!studyDraft.other_method)return 'Escreva qual foi a outra forma de estudo.';
+ if(studyDraft.methods.includes('questoes')){for(const q of studyDraft.questions){if(!q.disciplina)return 'Informe a disciplina das questões.';const n=Number(q.questoes),a=Number(q.acertos);if(!Number.isFinite(n)||n<1)return 'Informe a quantidade de questões resolvidas.';if(!Number.isFinite(a)||a<0||a>n)return 'Os acertos devem estar entre 0 e o total de questões.'}}
+ return '';
+}
+async function submitStudentStudy(){syncStudyInputs();const msg=$('#study-message'),error=validateStudyDraft();if(error){msg.className='study-message err';msg.textContent=error;return}const payload={matricula:session.mat,study_date:todayISO(),studies:studyDraft.studies.filter(s=>s.area||s.disciplina||s.assunto),methods:studyDraft.methods,other_method:studyDraft.other_method,questions:studyDraft.methods.includes('questoes')?studyDraft.questions:[],notes:studyDraft.notes};const btn=$('#study-save');btn.disabled=true;btn.textContent='Salvando...';try{const saved=await saveStudyDay(payload);const row=Array.isArray(saved)?saved[0]:saved||payload;msg.className='study-message ok';msg.textContent='✓ Estudo registrado';$('#study-summary-wrap').innerHTML=studySummaryHtml(row);addAudit('ROTINA DE ESTUDOS',`Registro diário · ${session.mat}`)}catch(e){console.error(e);msg.className='study-message err';msg.textContent='Não foi possível salvar. Verifique se o banco de estudos foi configurado.'}finally{btn.disabled=false;btn.textContent='Salvar meu estudo'}}
+function studySummaryHtml(r){r=normalizeStudyRow(r);const qs=r.questions||[],total=studyTotalQuestions(qs),hits=studyTotalHits(qs),perf=total?Math.round(hits/total*100):null;return `<div class="study-summary"><h3>Resumo de hoje</h3>${r.studies.map(s=>`<div class="study-summary-line"><b>${studyAreaLabel(s.area)}</b> · ${esc(s.disciplina||'')} · ${esc(s.assunto||'')}</div>`).join('')}<div class="study-summary-line">${esc(studyFormatMethods(r.methods,r.other_method))}</div>${total?`<div class="study-summary-line"><b>${total}</b> questões · <b>${hits}</b> acertos · <b>${perf}%</b></div>`:''}${r.notes?'<div class="study-summary-line">📝 Anotação registrada</div>':''}</div>`}
+
+async function renderAcompanhamentoEstudos(){
+ if(!['gestao','admin'].includes(session?.role)){renderDashboard();return}
+ setTitle('Acompanhamento de Estudos');
+ const today=todayISO();
+ $('#view').innerHTML=`<div class="card card-pad"><div class="section-title"><div><h2>Acompanhamento de Estudos</h2><p>Controle diário dos registros de estudo e cruzamento com o Espaço Evoluir.</p></div><button class="btn btn-primary" id="study-m-pdf">Gerar PDF</button></div><div class="study-management-tabs"><button class="study-management-tab active" data-mode="today">Hoje</button><button class="study-management-tab" data-mode="week">Semana</button><button class="study-management-tab" data-mode="history">Histórico</button></div><div class="study-manage-top"><div class="filters"><input id="study-m-date" type="date" value="${today}"><select id="study-m-serie"><option value="">Todas as séries</option>${sortedSeries().map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}</select><select id="study-m-student"><option value="">Todos os alunos</option>${alphaStudents().map(s=>`<option value="${s.mat}">${esc(s.nome)}</option>`).join('')}</select><button class="btn btn-dark" id="study-m-refresh">Visualizar</button></div></div><div id="study-m-content"><div class="empty">Carregando...</div></div></div>`;
+ $$('.study-management-tab').forEach(b=>b.onclick=()=>{studyManagementMode=b.dataset.mode;$$('.study-management-tab').forEach(x=>x.classList.toggle('active',x===b));refreshStudyManagement()});
+ $('#study-m-refresh').onclick=refreshStudyManagement;$('#study-m-pdf').onclick=generateStudyManagementPdf;await refreshStudyManagement();
+}
+async function refreshStudyManagement(){
+ const root=$('#study-m-content');if(!root)return;root.innerHTML='<div class="empty">Carregando...</div>';
+ const base=$('#study-m-date')?.value||todayISO();let from=base,to=base;if(studyManagementMode==='week'){from=studyMonday(base);to=studySunday(base)}else if(studyManagementMode==='history'){const d=new Date(base+'T12:00:00');d.setDate(d.getDate()-29);from=localDateISO(d);to=base}
+ const mat=$('#study-m-student')?.value||'';
+ try{
+  const [studyRows,evoluirRows]=await Promise.all([getStudyManagement(from,to,mat||null),getEvoluirManagement(from,to,mat||null)]);studyManagementRows={study:studyRows.map(normalizeStudyRow),evoluir:evoluirRows,from,to};
+  if(studyManagementMode==='week')renderStudyWeekManagement(studyManagementRows);else renderStudyDayHistoryManagement(studyManagementRows,studyManagementMode==='today');
+ }catch(e){console.error(e);root.innerHTML='<div class="empty">Não foi possível carregar os registros de estudo. Execute o arquivo <b>schema.sql</b> no Supabase para ativar este módulo.</div>'}
+}
+function managementStudentList(){const serie=$('#study-m-serie')?.value||'',mat=$('#study-m-student')?.value||'';return alphaStudents().filter(s=>(!serie||String(s.serie)===serie)&&(!mat||s.mat===mat))}
+function evoByKey(rows){const m=new Map();(rows||[]).forEach(r=>m.set(`${r.matricula}|${r.study_date}`,r));return m}
+function studyByKey(rows){const m=new Map();(rows||[]).forEach(r=>m.set(`${r.matricula}|${r.study_date}`,r));return m}
+function renderStudyDayHistoryManagement(data,isToday){
+ const root=$('#study-m-content'),studies=studyByKey(data.study),evo=evoByKey(data.evoluir),list=managementStudentList();let rows=[];
+ if(isToday){rows=list.map(s=>{const key=`${s.mat}|${data.from}`;return {student:s,date:data.from,study:studies.get(key)||null,evo:evo.get(key)||null}})}else{const dates=new Set([...data.study.map(r=>r.study_date),...data.evoluir.map(r=>r.study_date)]);[...dates].sort().reverse().forEach(date=>list.forEach(s=>{const key=`${s.mat}|${date}`,st=studies.get(key),ev=evo.get(key);if(st||ev)rows.push({student:s,date,study:st||null,evo:ev||null})}))}
+ const accessed=rows.filter(r=>r.evo).length,registered=rows.filter(r=>r.study).length,noReg=rows.filter(r=>r.evo&&!r.study).length,totalQs=rows.reduce((n,r)=>n+studyTotalQuestions(r.study?.questions||[]),0);
+ root.innerHTML=`<div class="grid study-kpis"><div class="card kpi"><span>${isToday?'Acessaram hoje':'Acessos no período'}</span><b>${accessed}</b><small>Espaço Evoluir</small></div><div class="card kpi"><span>Registros de estudo</span><b>${registered}</b><small>${isToday&&list.length?Math.round(registered/list.length*100)+'% dos alunos filtrados':'no período'}</small></div><div class="card kpi"><span>Acessaram e não registraram</span><b>${noReg}</b><small>Alunos para acompanhamento</small></div><div class="card kpi"><span>Questões registradas</span><b>${totalQs}</b><small>Total</small></div></div><div class="table-wrap"><table class="table"><thead><tr><th>${isToday?'Aluno':'Data'}</th>${isToday?'':'<th>Aluno</th>'}<th>Turma</th><th>Espaço Evoluir</th><th>Tempo efetivo</th><th>Registrou?</th><th>Áreas / assuntos</th><th>Questões</th><th>Anotações</th><th></th></tr></thead><tbody>${rows.length?rows.map(r=>studyManagementRowHtml(r,isToday)).join(''):'<tr><td colspan="10"><div class="empty">Nenhum registro encontrado.</div></td></tr>'}</tbody></table></div>`;
+ $$('.study-detail-btn').forEach(b=>b.onclick=()=>openStudyDetail(b.dataset.mat,b.dataset.date));
+}
+function studyManagementRowHtml(r,isToday){const st=r.study,ev=r.evo,qs=studyTotalQuestions(st?.questions||[]),areas=st?(st.studies||[]).map(x=>`${studyAreaLabel(x.area)} · ${x.disciplina||''} · ${x.assunto||''}`).join('<br>'):'—';return `<tr>${isToday?`<td><b>${esc(r.student.nome)}</b></td>`:`<td>${fmtDate(r.date)}</td><td><b>${esc(r.student.nome)}</b></td>`}<td>${esc(studentLabel(r.student))}</td><td>${ev?'<span class="study-status-ok">✓ Acessou</span>':'<span class="study-muted">—</span>'}</td><td>${ev?minutesLabel(ev.effective_minutes):'—'}</td><td>${st?'<span class="study-status-ok">✓ Sim</span>':'<span class="study-status-no">Não</span>'}</td><td>${areas}</td><td>${qs||'—'}</td><td>${st?.notes?'✓':'—'}</td><td>${st?`<button class="btn btn-ghost btn-sm study-detail-btn" data-mat="${r.student.mat}" data-date="${r.date}">Ver</button>`:''}</td></tr>`}
+function renderStudyWeekManagement(data){
+ const root=$('#study-m-content'),list=managementStudentList();const byStudent=list.map(s=>{const st=data.study.filter(r=>r.matricula===s.mat),ev=data.evoluir.filter(r=>r.matricula===s.mat),qs=st.reduce((n,r)=>n+studyTotalQuestions(r.questions),0),hits=st.reduce((n,r)=>n+studyTotalHits(r.questions),0),eff=ev.reduce((n,r)=>n+Number(r.effective_minutes||0),0),areas=[...new Set(st.flatMap(r=>r.studies.map(x=>studyAreaLabel(x.area))))];return {s,st,ev,qs,hits,eff,areas}});const reg=byStudent.filter(x=>x.st.length).length,access=byStudent.filter(x=>x.ev.length).length,qs=byStudent.reduce((n,x)=>n+x.qs,0),eff=byStudent.reduce((n,x)=>n+x.eff,0);
+ root.innerHTML=`<div class="grid study-kpis"><div class="card kpi"><span>Alunos com acesso</span><b>${access}</b><small>${fmtDate(data.from)} a ${fmtDate(data.to)}</small></div><div class="card kpi"><span>Alunos com registro</span><b>${reg}</b><small>Na semana</small></div><div class="card kpi"><span>Tempo efetivo total</span><b>${minutesLabel(eff)}</b><small>Espaço Evoluir</small></div><div class="card kpi"><span>Questões</span><b>${qs}</b><small>Registradas</small></div></div><div class="table-wrap"><table class="table"><thead><tr><th>Aluno</th><th>Turma</th><th>Dias no espaço</th><th>Dias registrados</th><th>Tempo efetivo</th><th>Áreas</th><th>Questões</th><th>Acertos</th><th>Desempenho</th></tr></thead><tbody>${byStudent.length?byStudent.map(x=>`<tr><td><b>${esc(x.s.nome)}</b></td><td>${esc(studentLabel(x.s))}</td><td>${new Set(x.ev.map(r=>r.study_date)).size}</td><td>${new Set(x.st.map(r=>r.study_date)).size}</td><td>${minutesLabel(x.eff)}</td><td>${x.areas.join(', ')||'—'}</td><td>${x.qs||'—'}</td><td>${x.hits||'—'}</td><td>${x.qs?Math.round(x.hits/x.qs*100)+'%':'—'}</td></tr>`).join(''):'<tr><td colspan="9"><div class="empty">Nenhum aluno encontrado.</div></td></tr>'}</tbody></table></div>`;
+}
+async function openStudyDetail(mat,date){const s=studentByMat(mat);let row=null;try{row=await getStudyDay(mat,date)}catch(e){}if(!row)return;row=normalizeStudyRow(row);const root=$('#modal-root');root.innerHTML=`<div class="modal-backdrop"><div class="modal"><h3>${esc(s?.nome||mat)} — ${fmtDate(date)}</h3><div class="study-detail"><div class="study-detail-block"><h4>O que estudou</h4>${row.studies.map(x=>`<p><b>${studyAreaLabel(x.area)}</b> · ${esc(x.disciplina||'')} · ${esc(x.assunto||'')}</p>`).join('')}</div><div class="study-detail-block"><h4>Como estudou</h4><p>${esc(studyFormatMethods(row.methods,row.other_method))}</p></div>${row.questions.length?`<div class="study-detail-block"><h4>Questões</h4>${row.questions.map(q=>`<p>${esc(q.disciplina)} — ${Number(q.questoes||0)} questões · ${Number(q.acertos||0)} acertos · ${studyPerf(q)}%</p>`).join('')}</div>`:''}${row.notes?`<div class="study-detail-block"><h4>Minhas Anotações</h4><p>${esc(row.notes)}</p></div>`:''}</div><div class="modal-actions"><button class="btn btn-dark" id="study-detail-close">Fechar</button></div></div></div>`;$('#study-detail-close').onclick=()=>root.innerHTML=''}
+function generateStudyManagementPdf(){
+ if(!studyManagementRows?.study)return;const J=getJsPDF();if(!J){window.print();return}const doc=new J({orientation:'landscape'}),mode=studyManagementMode;doc.setFontSize(17);doc.text('Colégio Evolução — Acompanhamento de Estudos',14,15);doc.setFontSize(10);doc.text(`Visão: ${mode==='today'?'Hoje':mode==='week'?'Semana':'Histórico'} · Período: ${fmtDate(studyManagementRows.from)} a ${fmtDate(studyManagementRows.to)}`,14,22);let y=32;const list=managementStudentList(),studies=studyByKey(studyManagementRows.study),evo=evoByKey(studyManagementRows.evoluir);const lines=[];
+ if(mode==='week'){list.forEach(s=>{const st=studyManagementRows.study.filter(r=>r.matricula===s.mat),ev=studyManagementRows.evoluir.filter(r=>r.matricula===s.mat),qs=st.reduce((n,r)=>n+studyTotalQuestions(r.questions),0),hits=st.reduce((n,r)=>n+studyTotalHits(r.questions),0),eff=ev.reduce((n,r)=>n+Number(r.effective_minutes||0),0);lines.push([s.nome,studentLabel(s),`${new Set(ev.map(r=>r.study_date)).size} dias`,`${new Set(st.map(r=>r.study_date)).size} dias`,minutesLabel(eff),String(qs),qs?Math.round(hits/qs*100)+'%':'—'])})}else{const dates=mode==='today'?[studyManagementRows.from]:[...new Set([...studyManagementRows.study.map(r=>r.study_date),...studyManagementRows.evoluir.map(r=>r.study_date)])].sort();dates.forEach(date=>list.forEach(s=>{const st=studies.get(`${s.mat}|${date}`),ev=evo.get(`${s.mat}|${date}`);if(mode==='today'||st||ev)lines.push([fmtDate(date),s.nome,studentLabel(s),ev?'Sim':'Não',ev?minutesLabel(ev.effective_minutes):'—',st?'Sim':'Não',String(studyTotalQuestions(st?.questions||[]))])}))}
+ const heads=mode==='week'?['Aluno','Turma','Dias espaço','Dias registrados','Tempo','Questões','Desemp.']:['Data','Aluno','Turma','Espaço','Tempo','Registro','Questões'];const xs=mode==='week'?[14,88,120,155,198,230,258]:[14,38,110,142,174,205,238];doc.setFontSize(8.5);heads.forEach((h,i)=>doc.text(h,xs[i],y));y+=6;lines.forEach(line=>{if(y>190){doc.addPage();y=18;heads.forEach((h,i)=>doc.text(h,xs[i],y));y+=6}line.forEach((v,i)=>doc.text(String(v||'').slice(0,i===1?34:24),xs[i],y));y+=5});doc.save(`acompanhamento_estudos_${mode}_${studyManagementRows.from}_${studyManagementRows.to}.pdf`)
+}
 
 
 // ESPAÇO EVOLUIR
