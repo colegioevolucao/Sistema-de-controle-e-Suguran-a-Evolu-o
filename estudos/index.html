@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b2c57" />
+  <title>Evolução | Painel de Estudos</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar no-print">
+      <div class="brand">
+        <div class="brand-small">COLÉGIO</div>
+        <div class="brand-name">evolução</div>
+      </div>
+
+      <div class="user-block">
+        <strong>Mauricio</strong>
+        <span>Aluno Evolução</span>
+      </div>
+
+      <nav class="side-nav" aria-label="Navegação principal">
+        <button class="side-item" type="button"><span>▣</span><span>Minha Carteira</span></button>
+        <button class="side-item disabled" type="button" disabled title="Indisponível">
+          <span class="lock-accent">🔒</span><span><b>Credencial Digital</b><small>Indisponível</small></span>
+        </button>
+        <button class="side-item disabled" type="button" disabled title="Indisponível">
+          <span class="lock-accent">🔒</span><span><b>Meu Acesso</b><small>Indisponível</small></span>
+        </button>
+        <button class="side-item active" type="button"><span>◆</span><span>Espaço Evoluir</span></button>
+      </nav>
+
+      <div class="view-switch">
+        <span>Visualizar protótipo</span>
+        <button id="studentViewBtn" class="selected" type="button">Aluno</button>
+        <button id="managementViewBtn" type="button">Gestão</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div id="app"></div>
+    </main>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
