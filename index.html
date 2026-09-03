@@ -630,7 +630,10 @@ async function saveStudyDay(payload){return await supabaseRpc('save_study_day',{
 function getStudyManagementKey(){let k=sessionStorage.getItem('evolucao_study_management_key')||'';if(!k){k=(prompt('Informe a chave de acesso do Acompanhamento de Estudos:')||'').trim();if(k)sessionStorage.setItem('evolucao_study_management_key',k)}return k}
 async function getStudyManagement(from,to,mat=null){const key=getStudyManagementKey();if(!key)throw new Error('STUDY_MANAGEMENT_KEY_REQUIRED');try{return await supabaseRpc('get_study_management',{p_from:from,p_to:to,p_matricula:mat||null,p_management_key:key})||[]}catch(e){if(String(e?.message||'').includes('STUDY_MANAGEMENT_ACCESS_DENIED'))sessionStorage.removeItem('evolucao_study_management_key');throw e}}
 function studyBlankStudy(){return {area:'',disciplina:'',assunto:''}}
-function studyBlankQuestion(){return {disciplina:'',questoes:'',acertos:''}}
+function studyBlankQuestion(disciplina=''){return {disciplina:String(disciplina||'').trim(),questoes:'',acertos:''}}
+function studyDisciplineKey(v){return String(v||'').trim().toLocaleLowerCase('pt-BR')}
+function studyKnownDisciplines(){const seen=new Set(),out=[];(studyDraft.studies||[]).forEach(s=>{const d=String(s?.disciplina||'').trim(),k=studyDisciplineKey(d);if(d&&!seen.has(k)){seen.add(k);out.push(d)}});return out}
+function studyAddMissingQuestionDisciplines(){const known=studyKnownDisciplines();known.forEach(d=>{if(!(studyDraft.questions||[]).some(q=>studyDisciplineKey(q.disciplina)===studyDisciplineKey(d)))studyDraft.questions.push(studyBlankQuestion(d))});if(!studyDraft.questions.length)studyDraft.questions.push(studyBlankQuestion())}
 function studyAreaLabel(a){return ({natureza:'Natureza',humanas:'Humanas',linguagens:'Linguagens',matematica:'Matemática'})[a]||a||'—'}
 function studyPerf(q){const n=Number(q.questoes||0),a=Number(q.acertos||0);return n>0?Math.max(0,Math.min(100,Math.round(a/n*100))):null}
 function studyTotalQuestions(qs){return (qs||[]).reduce((n,q)=>n+Number(q.questoes||0),0)}
@@ -663,7 +666,7 @@ function drawStudentStudyPage(existing=null){
  </div></div>`;
  drawStudyEntries(); drawStudyQuestions();
  $('#study-add-entry').onclick=()=>{syncStudyInputs();if(studyDraft.studies.length<3){studyDraft.studies.push(studyBlankStudy());drawStudyEntries()}updateStudyAddButton()};
- $$('#study-methods .study-choice').forEach(b=>b.onclick=()=>{syncStudyInputs();const k=b.dataset.method,i=studyDraft.methods.indexOf(k);if(i>=0)studyDraft.methods.splice(i,1);else studyDraft.methods.push(k);if(k==='questoes'&&!studyDraft.methods.includes('questoes'))studyDraft.questions=[];drawStudentStudyPage(null)});
+ $$('#study-methods .study-choice').forEach(b=>b.onclick=()=>{syncStudyInputs();const k=b.dataset.method,i=studyDraft.methods.indexOf(k);if(i>=0)studyDraft.methods.splice(i,1);else studyDraft.methods.push(k);if(k==='questoes'){if(!studyDraft.methods.includes('questoes'))studyDraft.questions=[];else studyAddMissingQuestionDisciplines()}drawStudentStudyPage(null)});
  $('#study-add-question')?.addEventListener('click',()=>{syncStudyInputs();studyDraft.questions.push(studyBlankQuestion());drawStudyQuestions()});
  $('#study-save').onclick=submitStudentStudy;
  updateStudyAddButton();
@@ -672,6 +675,7 @@ function drawStudyEntries(){
  const root=$('#study-entries');if(!root)return;
  root.innerHTML=studyDraft.studies.map((s,i)=>`<div class="study-entry" data-study-index="${i}"><div class="study-entry-head"><b>Estudo ${i+1}</b>${i?`<button class="study-remove" data-remove-study="${i}">Remover</button>`:''}</div><div class="study-area-row">${[['natureza','Natureza'],['humanas','Humanas'],['linguagens','Linguagens'],['matematica','Matemática']].map(([k,l])=>`<button class="study-choice${s.area===k?' selected':''}" data-area="${k}" data-i="${i}">${l}</button>`).join('')}</div><div class="study-fields"><div class="field"><label>Disciplina</label><input class="study-discipline" data-i="${i}" value="${esc(s.disciplina||'')}" placeholder="Digite a disciplina..."></div><div class="field"><label>Assunto</label><input class="study-subject" data-i="${i}" value="${esc(s.assunto||'')}" placeholder="Digite o assunto..."></div></div></div>`).join('');
  $$('[data-area]').forEach(b=>b.onclick=()=>{syncStudyInputs();studyDraft.studies[Number(b.dataset.i)].area=b.dataset.area;drawStudyEntries()});
+ $$('.study-discipline').forEach(inp=>inp.onchange=()=>{const idx=Number(inp.dataset.i),st=studyDraft.studies[idx];if(!st)return;const oldDisc=String(st.disciplina||'').trim(),newDisc=inp.value.trim();st.disciplina=newDisc;if(studyDraft.methods.includes('questoes')){const oldKey=studyDisciplineKey(oldDisc),newKey=studyDisciplineKey(newDisc);if(oldKey&&newKey&&oldKey!==newKey){const linked=studyDraft.questions.find(q=>studyDisciplineKey(q.disciplina)===oldKey);if(linked)linked.disciplina=newDisc;else if(!studyDraft.questions.some(q=>studyDisciplineKey(q.disciplina)===newKey))studyDraft.questions.push(studyBlankQuestion(newDisc))}else if(newKey&&!studyDraft.questions.some(q=>studyDisciplineKey(q.disciplina)===newKey)){studyDraft.questions.push(studyBlankQuestion(newDisc))}drawStudyQuestions()}});
  $$('[data-remove-study]').forEach(b=>b.onclick=()=>{syncStudyInputs();studyDraft.studies.splice(Number(b.dataset.removeStudy),1);if(!studyDraft.studies.length)studyDraft.studies=[studyBlankStudy()];drawStudyEntries();updateStudyAddButton()});
 }
 function updateStudyAddButton(){const b=$('#study-add-entry');if(b){b.disabled=studyDraft.studies.length>=3;b.textContent=studyDraft.studies.length>=3?'Limite de 3 estudos atingido':'+ Adicionar outro estudo'}}
