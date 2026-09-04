@@ -710,11 +710,19 @@ let studyDraft={studies:[],methods:[],other_method:'',questions:[],notes:''};
 let studyManagementMode='today';
 let studyManagementRows=[];
 
-function studyAccessCode(mat){const s=(session?.mat===mat?session:studentByMat(mat));return String(s?.codigo||'').trim()}
+function studyAccessCode(mat){const logged=(session?.mat===mat?session:null);const student=studentByMat(mat);return String(logged?.codigo||student?.codigo||'').trim()}
 async function getStudyDay(mat,date){const r=await supabaseRpc('get_study_day',{p_matricula:mat,p_study_date:date,p_codigo_acesso:studyAccessCode(mat)});return Array.isArray(r)?(r[0]||null):r}
 async function saveStudyDay(payload){return await supabaseRpc('save_study_day',{p_matricula:payload.matricula,p_study_date:payload.study_date,p_studies:payload.studies,p_methods:payload.methods,p_other_method:payload.other_method||'',p_questions:payload.questions,p_notes:payload.notes||'',p_codigo_acesso:studyAccessCode(payload.matricula)})}
-function getStudyManagementKey(){let k=sessionStorage.getItem('evolucao_study_management_key')||'';if(!k){k=(prompt('Informe a chave de acesso do Acompanhamento de Estudos:')||'').trim();if(k)sessionStorage.setItem('evolucao_study_management_key',k)}return k}
-async function getStudyManagement(from,to,mat=null){const key=getStudyManagementKey();if(!key)throw new Error('STUDY_MANAGEMENT_KEY_REQUIRED');try{return await supabaseRpc('get_study_management',{p_from:from,p_to:to,p_matricula:mat||null,p_management_key:key})||[]}catch(e){if(String(e?.message||'').includes('STUDY_MANAGEMENT_ACCESS_DENIED'))sessionStorage.removeItem('evolucao_study_management_key');throw e}}
+async function getStudyManagement(from,to,mat=null){
+ if(!['orientadora','gestao','admin'].includes(session?.role)) throw new Error('STUDY_STAFF_ACCESS_DENIED');
+ return await supabaseRpc('get_study_management_staff',{
+  p_username:session.username,
+  p_password:session.pass,
+  p_from:from,
+  p_to:to,
+  p_matricula:mat||null
+ })||[];
+}
 function studyBlankStudy(){return {area:'',disciplina:'',assunto:''}}
 function studyBlankQuestion(disciplina=''){return {disciplina:String(disciplina||'').trim(),questoes:'',acertos:''}}
 function studyDisciplineKey(v){return String(v||'').trim().toLocaleLowerCase('pt-BR')}
