@@ -409,39 +409,55 @@ button{cursor:pointer}
 
 
 
-/* V10 — VISUAL ALUNO + ORIENTADORA */
-.study-summary{border:1px solid #d9e4f2;border-radius:20px;background:#fff;padding:20px;margin-top:18px;box-shadow:0 10px 30px rgba(15,53,112,.07)}
-.study-summary-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
-.study-summary-head h3{font-size:19px;color:#123b73;margin:0;display:flex;align-items:center;gap:10px}
-.study-summary-head h3:before{content:'';width:5px;height:32px;border-radius:999px;background:var(--orange);display:inline-block}
-.study-summary-date{font-size:12px;color:#175cd3;background:#eef4ff;border:1px solid #d9e6ff;border-radius:999px;padding:7px 11px}
-.study-summary-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px}
+/* V12 — VISUAL FIEL AOS PROTÓTIPOS + SINCRONIZAÇÃO */
+.study-summary{border:1px solid #d9e4f2;border-radius:22px;background:#fff;padding:24px;margin-top:20px;box-shadow:0 12px 34px rgba(15,53,112,.075)}
+.study-summary-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px}
+.study-summary-head h3{font-size:25px;line-height:1.15;color:#0d2f6e;margin:0;display:flex;align-items:center;gap:14px;font-weight:900}
+.study-summary-head h3:before{content:'';width:6px;height:44px;border-radius:999px;background:var(--orange);display:inline-block}
+.study-summary-date{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:#174ea6;background:#f1f5ff;border:1px solid #e1e9fb;border-radius:999px;padding:11px 16px;white-space:nowrap}
+.study-summary-date:before{content:'▣';font-size:14px}
+.study-summary-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:26px;align-items:start}
 .study-summary-col{min-width:0}
-.study-summary-col + .study-summary-col{border-left:1px solid #e7edf5;padding-left:18px}
-.study-summary-section-title{font-size:13px;font-weight:850;color:#173f77;margin:0 0 10px}
-.study-area-chip{display:inline-flex;align-items:center;gap:6px;background:#edf5ff;border:1px solid #dbe9ff;color:#174ea6;border-radius:10px;padding:7px 10px;font-size:12px;font-weight:800;margin-bottom:10px}
-.study-topic-line{border-left:2px dashed #cbdcf4;padding:6px 0 6px 14px;margin-bottom:14px}
-.study-topic-line b{display:block;font-size:16px;color:#173f77}.study-topic-line span{display:block;font-size:13px;color:#667085;margin-top:3px}
-.study-tag-list{display:flex;flex-wrap:wrap;gap:8px}.study-tag{display:inline-flex;align-items:center;padding:7px 10px;border-radius:10px;background:#fff;border:1px solid #ccd9ea;color:#174ea6;font-size:12px;font-weight:750}
-.study-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.study-stat{border:1px solid #dce6f3;border-radius:14px;background:#fff;padding:14px;text-align:center}.study-stat span{display:block;font-size:11px;color:#667085;margin-bottom:6px}.study-stat b{display:block;font-size:27px;line-height:1;color:#102f63}.study-stat.performance b{color:#f27a1a}.study-stat small{font-size:10px;color:#98a2b3;margin-top:6px;display:block}
-.study-note-wide{grid-column:1/-1;border-top:1px solid #e6edf5;padding-top:16px;margin-top:2px}.study-note-box{border:1px solid #d7e3f2;border-radius:13px;background:#fbfdff;padding:13px 14px;color:#475467;font-size:13px;line-height:1.5}
+.study-summary-col + .study-summary-col{border-left:1px solid #dfe7f2;padding-left:26px}
+.study-summary-section-title{font-size:16px;font-weight:900;color:#0d2f6e;margin:0 0 14px}
+.study-topic-list{display:grid;gap:12px}
+.study-topic-line{position:relative;border-left:2px dashed #c9d8ec;padding:4px 0 6px 20px;margin-left:10px}
+.study-topic-line:before{content:'';position:absolute;left:-6px;top:22px;width:10px;height:10px;border-radius:50%;background:#2f6dd5;border:3px solid #fff;box-shadow:0 0 0 1px #cbd9ee}
+.study-area-chip{display:inline-flex;align-items:center;gap:7px;background:#eaf3ff;border:1px solid #d6e8ff;color:#174ea6;border-radius:12px;padding:9px 13px;font-size:13px;font-weight:850;margin:0 0 12px -4px}
+.study-area-chip:before{content:'◉';font-size:12px}
+.study-topic-line b{display:block;font-size:19px;color:#102f63;margin:0 0 4px}.study-topic-line span:not(.study-area-chip){display:block;font-size:15px;color:#667085}
+.study-method-wrap{margin-top:22px;padding-top:20px;border-top:1px solid #e5ebf4}
+.study-tag-list{display:flex;flex-wrap:wrap;gap:10px}
+.study-tag{display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border-radius:11px;background:#fff;border:1px solid #cad7e8;color:#174ea6;font-size:13px;font-weight:800;box-shadow:0 2px 5px rgba(16,24,40,.02)}
+.study-tag:before{content:'✓';display:inline-grid;place-items:center;width:17px;height:17px;border:1.5px solid #2c66c3;border-radius:4px;font-size:10px}
+.study-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.study-stat{border:1px solid #d7e2f0;border-radius:18px;background:#fff;padding:18px 12px 20px;text-align:center;min-height:184px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.study-stat-icon{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;margin-bottom:14px;background:#eaf3ff;color:#215dbb;font-size:25px;font-weight:900}
+.study-stat.hits .study-stat-icon{background:#eafaf3;color:#069b73}.study-stat.performance .study-stat-icon{background:#fff2df;color:#f27a1a}
+.study-stat span{display:block;font-size:14px;color:#173f77;font-weight:850;margin-bottom:10px}.study-stat b{display:block;font-size:40px;line-height:1;color:#071f49;font-weight:900}.study-stat.performance b{color:#f27a1a}.study-stat small{font-size:11px;color:#98a2b3;margin-top:8px;display:block}
+.study-note-wide{grid-column:1/-1;border-top:1px solid #dfe7f2;padding-top:20px;margin-top:0}
+.study-note-box{position:relative;border:1px solid #cfdceb;border-radius:16px;background:#fff;padding:18px 18px 18px 58px;color:#344054;font-size:14px;line-height:1.55;min-height:62px;display:flex;align-items:center}
+.study-note-box:before{content:'✎';position:absolute;left:17px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#eef4ff;color:#175cd3;font-size:17px;font-weight:900}
+.study-summary-empty{color:#98a2b3;font-size:13px}
 
-.orient-study-page{display:grid;gap:16px}
-.orient-study-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
-.orient-study-head h2{margin:0;color:#173f77;font-size:22px}.orient-study-head p{margin:4px 0 0;color:#667085;font-size:13px}
-.orient-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.orient-kpi{background:#fff;border:1px solid #e3eaf4;border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 22px rgba(16,24,40,.05)}
-.orient-kpi-ico{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;background:#eef4ff;color:#175cd3}.orient-kpi.ok .orient-kpi-ico{background:#ecfdf3;color:#027a48}.orient-kpi.warn .orient-kpi-ico{background:#fff4e8;color:#d85f16}.orient-kpi b{display:block;font-size:27px;color:#173f77;line-height:1.05}.orient-kpi.ok b{color:#039855}.orient-kpi.warn b{color:#f2792e}.orient-kpi span{display:block;color:#667085;font-size:11px;margin-bottom:4px}
-.orient-filters{background:#fff;border:1px solid #e3eaf4;border-radius:16px;padding:14px;display:grid;grid-template-columns:180px 1fr 1fr 1fr auto;gap:10px;align-items:end}.orient-filters label{font-size:11px;color:#667085;font-weight:700;display:block;margin-bottom:5px}.orient-filters input,.orient-filters select{width:100%;height:42px;border:1px solid #d0d9e6;border-radius:10px;padding:0 11px;background:#fff;color:#344054}
-.orient-table-card{background:#fff;border:1px solid #e3eaf4;border-radius:16px;overflow:hidden;box-shadow:0 8px 22px rgba(16,24,40,.04)}
-.orient-alerts{background:#fff;border:1px solid #e3eaf4;border-radius:16px;padding:16px}.orient-alerts h3{margin:0 0 12px;color:#173f77;font-size:16px}.orient-alert-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.orient-alert{display:flex;gap:10px;align-items:flex-start;padding:12px;border-radius:13px;background:#fbfdff;border:1px solid #edf1f7}.orient-alert .ico{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fff4e8;color:#d85f16;flex:0 0 auto}.orient-alert p{margin:0;color:#475467;font-size:12px;line-height:1.45}
-.orient-status{font-weight:800;font-size:12px}.orient-status.ok{color:#027a48}.orient-status.no{color:#b42318}.orient-status.muted{color:#98a2b3}
+.orient-study-page{display:grid;gap:18px}
+.orient-study-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+.orient-study-head h2{margin:0;color:#0d2f6e;font-size:32px;line-height:1.05;font-weight:900}.orient-study-head p{margin:7px 0 0;color:#667085;font-size:14px;line-height:1.45}.orient-study-head p b{display:block;color:#173f77;font-size:17px;margin-bottom:4px}
+.orient-subdate{display:inline-flex;align-items:center;gap:7px;color:#667085;font-size:13px;font-weight:500}.orient-subdate:before{content:'▣';color:#2c66c3;font-size:11px}
+.orient-head-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.orient-head-actions .btn{height:44px;background:#fff!important;color:#175cd3!important;border:1px solid #b8ccf5!important;box-shadow:0 5px 14px rgba(23,92,211,.06);border-radius:11px}.orient-head-actions .btn:hover{background:#f5f8ff!important}
+.orient-sync-note{font-size:11px;color:#98a2b3;text-align:right;margin-top:5px}
+.orient-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.orient-kpi{background:#fff;border:1px solid #dfe7f1;border-radius:17px;padding:20px;display:flex;align-items:center;gap:16px;box-shadow:0 8px 24px rgba(16,24,40,.045);min-height:118px}
+.orient-kpi-ico{width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:23px;background:#edf3ff;color:#175cd3;flex:0 0 auto}.orient-kpi.ok .orient-kpi-ico{background:#e9f9f1;color:#0a9c70}.orient-kpi.warn .orient-kpi-ico{background:#fff1df;color:#ef7b1b}.orient-kpi.questions .orient-kpi-ico{background:#f0efff;color:#4555c7}.orient-kpi b{display:block;font-size:34px;color:#123b73;line-height:1}.orient-kpi.ok b{color:#0a9c70}.orient-kpi.warn b{color:#ef7b1b}.orient-kpi span{display:block;color:#173f77;font-size:13px;font-weight:800;margin-bottom:8px}
+.orient-filters{background:#fff;border:1px solid #dfe7f1;border-radius:17px;padding:17px 18px;display:grid;grid-template-columns:180px 1fr 1.2fr 1fr auto;gap:14px;align-items:end;box-shadow:0 6px 18px rgba(16,24,40,.035)}.orient-filters label{font-size:12px;color:#173f77;font-weight:800;display:block;margin-bottom:7px}.orient-filters input,.orient-filters select{width:100%;height:45px;border:1px solid #ccd8e7;border-radius:10px;padding:0 12px;background:#fff;color:#344054;font-size:13px}.orient-filter-reset{height:45px;background:#fff!important;color:#175cd3!important;border:1px solid #c8d7ee!important;border-radius:10px!important}
+.orient-table-card{background:#fff;border:1px solid #dfe7f1;border-radius:17px;overflow:hidden;box-shadow:0 8px 22px rgba(16,24,40,.04)}
+.orient-table-card .table-wrap{overflow:auto}.orient-table-card .table{min-width:1220px}.orient-table-card .table th{background:#fbfcfe;color:#173f77;font-size:11px;font-weight:850;padding:12px 11px;border-bottom:1px solid #dfe7f1}.orient-table-card .table td{padding:12px 11px;font-size:12px;vertical-align:middle}.orient-table-card .table tbody tr:hover{background:#fbfdff}
+.orient-detail-btn{background:#fff!important;color:#175cd3!important;border:1px solid #93b4ee!important;border-radius:9px!important;font-weight:750!important;white-space:nowrap}
+.orient-alerts{background:#fff;border:1px solid #dfe7f1;border-radius:17px;padding:19px 20px;box-shadow:0 6px 18px rgba(16,24,40,.035)}.orient-alerts h3{margin:0 0 14px;color:#173f77;font-size:19px;display:flex;align-items:center;gap:9px}.orient-alerts h3:before{content:'♢';color:#ef7b1b;font-size:19px}.orient-alert-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0}.orient-alert{display:flex;gap:12px;align-items:center;padding:12px 18px;min-height:78px}.orient-alert + .orient-alert{border-left:1px solid #dfe7f1}.orient-alert .ico{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fff2e3;color:#e66c13;flex:0 0 auto;font-size:17px;font-weight:900}.orient-alert:nth-child(3) .ico{background:#eef4ff;color:#175cd3}.orient-alert p{margin:0;color:#344054;font-size:13px;line-height:1.5}
+.orient-status{font-weight:850;font-size:12px}.orient-status.ok{color:#027a48}.orient-status.no{color:#b42318}.orient-status.muted{color:#98a2b3}
+.orient-what{line-height:1.5;color:#173f77}.orient-question-cell{line-height:1.35;color:#344054}.orient-question-cell b{color:#173f77}.orient-note-yes{color:#039855;font-weight:900;font-size:15px}
 
-.orient-subdate{display:inline-block;margin-top:5px;color:#667085;font-size:12px;font-weight:500}
-.orient-study-head .btn{background:#fff!important;color:#175cd3!important;border:1px solid #b8ccf5!important;box-shadow:0 5px 14px rgba(23,92,211,.06)}
-.orient-study-head .btn:hover{background:#f5f8ff!important}
-@media(max-width:1100px){.orient-kpis{grid-template-columns:repeat(2,1fr)}.orient-filters{grid-template-columns:1fr 1fr}.orient-filters .btn{grid-column:1/-1}.orient-alert-grid{grid-template-columns:1fr}.study-summary-grid{grid-template-columns:1fr}.study-summary-col + .study-summary-col{border-left:0;padding-left:0;border-top:1px solid #e7edf5;padding-top:16px}}
-@media(max-width:600px){.orient-kpis{grid-template-columns:1fr 1fr}.orient-filters{grid-template-columns:1fr}.study-stat-grid{grid-template-columns:1fr 1fr}.study-summary{padding:15px}.study-summary-head{flex-direction:column;align-items:flex-start}}
-
+@media(max-width:1180px){.orient-kpis{grid-template-columns:repeat(2,1fr)}.orient-filters{grid-template-columns:1fr 1fr}.orient-filters .btn{grid-column:auto}.study-summary-grid{grid-template-columns:1fr}.study-summary-col + .study-summary-col{border-left:0;padding-left:0;border-top:1px solid #e7edf5;padding-top:20px}.orient-alert-grid{grid-template-columns:1fr}.orient-alert + .orient-alert{border-left:0;border-top:1px solid #dfe7f1}}
+@media(max-width:700px){.study-summary{padding:17px;border-radius:18px}.study-summary-head{flex-direction:column;align-items:flex-start}.study-summary-head h3{font-size:21px}.study-summary-head h3:before{height:34px}.study-stat-grid{grid-template-columns:1fr}.study-stat{min-height:130px}.orient-study-head{flex-direction:column}.orient-head-actions{width:100%}.orient-head-actions .btn{flex:1}.orient-kpis{grid-template-columns:1fr}.orient-filters{grid-template-columns:1fr}.orient-alert-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -712,7 +728,7 @@ async function login(){
  else if(found.role==='aluno' && studentAuth[found.mat]?.mustChange) forcePasswordChange(true);
  else openShell();
 }
-async function logout(){ clearInterval(window._studentCentralTimer); clearInterval(window._familyPickupTimer); clearInterval(window._evoluirTimer); clearInterval(window._portPickupCountTimer); closePickupPanel(true); if(session)addAudit('LOGOUT',roleLabel(session.role)); if(session?.role==='familia'&&familyAuthSession){try{await sbAuthClient.auth.signOut()}catch(e){} familyAuthSession=null;familyChildrenCache=[]} stopCamera(); session=null; $('#shell').classList.add('hidden'); $('#portaria-app').classList.add('hidden'); $('#auth').classList.remove('hidden'); $('#login-pass').value=''; }
+async function logout(){ stopStudyLiveSync(); clearInterval(window._studentCentralTimer); clearInterval(window._familyPickupTimer); clearInterval(window._evoluirTimer); clearInterval(window._portPickupCountTimer); closePickupPanel(true); if(session)addAudit('LOGOUT',roleLabel(session.role)); if(session?.role==='familia'&&familyAuthSession){try{await sbAuthClient.auth.signOut()}catch(e){} familyAuthSession=null;familyChildrenCache=[]} stopCamera(); session=null; $('#shell').classList.add('hidden'); $('#portaria-app').classList.add('hidden'); $('#auth').classList.remove('hidden'); $('#login-pass').value=''; }
 $('#logout').onclick=logout; $('#mobile-menu').onclick=()=>$('#sidebar').classList.toggle('open');
 
 // SHELL
@@ -730,6 +746,7 @@ function openShell(){
  $$('#nav .nav-btn:not(.nav-disabled)').forEach(b=>b.onclick=()=>renderView(b.dataset.view)); renderView(nav.find(x=>!x[3])?.[0]||'dashboard');
 }
 async function renderView(v){
+ stopStudyLiveSync();
  currentView=v;
  if((['gestao','admin'].includes(session?.role) || (session?.role==='orientadora' && v==='acompanhamento-estudos')) && ['dashboard','movimentacoes','na-escola','pendencias','atrasos','relatorios','acompanhamento-estudos'].includes(v)){try{await syncAllRecords()}catch(e){console.error('Falha ao sincronizar gestão:',e)}} try{await syncExitPermissions()}catch(e){console.error('Falha ao sincronizar autorizações de saída:',e)} $$('#nav .nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===v)); $('#sidebar').classList.remove('open'); $('#top-actions').innerHTML='';
  const map={carteira:renderCarteira,'minha-rotina-estudos':renderMinhaRotinaEstudos,'acompanhamento-estudos':renderAcompanhamentoEstudos,'credencial-digital':renderMinhaCredencial,'credenciais-digitais':renderCredenciaisDigitais,'meu-historico':renderMeuHistorico,'meu-evoluir':renderMeuEvoluir,'espaco-evoluir':renderEspacoEvoluir,'familia-filhos':renderFamiliaFilhos,'familia-acesso':renderFamiliaAcesso,'familia-evoluir':renderFamiliaEvoluir,'familia-aviso':renderFamiliaAviso,'familia-historico':renderFamiliaHistorico,dashboard:renderDashboard,movimentacoes:renderMovimentacoes,'na-escola':renderNaEscola,pendencias:renderPendencias,cadastros:renderCadastros,alunos:renderAlunos,atrasos:renderAtrasos,relatorios:renderRelatorios,'uso-sistema':renderSystemUsageReport,'acessos-portaria':renderAcessosPortaria,'avisos-familia':renderAvisosFamiliaHistorico,usuarios:renderUsuarios,auditoria:renderAuditoria,config:renderConfig};
@@ -743,6 +760,12 @@ const STUDY_METHODS=[['video','Aula/Videoaula'],['leitura','Leitura'],['questoes
 let studyDraft={studies:[],methods:[],other_method:'',questions:[],notes:''};
 let studyManagementMode='today';
 let studyManagementRows=[];
+let studyLiveTimer=null;
+let studyLiveBusy=false;
+const STUDY_LIVE_INTERVAL_MS=10000;
+function stopStudyLiveSync(){if(studyLiveTimer){clearInterval(studyLiveTimer);studyLiveTimer=null}}
+function startStudyLiveSync(fn){stopStudyLiveSync();studyLiveTimer=setInterval(async()=>{if(studyLiveBusy||currentView!=='acompanhamento-estudos')return;studyLiveBusy=true;try{await fn(true)}catch(e){console.warn('Atualização automática de estudos:',e)}finally{studyLiveBusy=false}},STUDY_LIVE_INTERVAL_MS)}
+window.addEventListener('study-record-saved',()=>{if(currentView==='acompanhamento-estudos'){if(session?.role==='orientadora')refreshAcompanhamentoOrientadora(true);else if(['gestao','admin'].includes(session?.role))refreshStudyManagement(true)}});
 
 function studyAccessCode(mat){const logged=(session?.mat===mat?session:null);const student=studentByMat(mat);return String(logged?.codigo||student?.codigo||'').trim()}
 async function getStudyDay(mat,date){const r=await supabaseRpc('get_study_day',{p_matricula:mat,p_study_date:date,p_codigo_acesso:studyAccessCode(mat)});return Array.isArray(r)?(r[0]||null):r}
@@ -819,15 +842,14 @@ function validateStudyDraft(){
  if(studyDraft.methods.includes('questoes')){for(const q of studyDraft.questions){if(!q.disciplina)return 'Informe a disciplina das questões.';const n=Number(q.questoes),a=Number(q.acertos);if(!Number.isFinite(n)||n<1)return 'Informe a quantidade de questões resolvidas.';if(!Number.isFinite(a)||a<0||a>n)return 'Os acertos devem estar entre 0 e o total de questões.'}}
  return '';
 }
-async function submitStudentStudy(){syncStudyInputs();const msg=$('#study-message'),error=validateStudyDraft();if(error){msg.className='study-message err';msg.textContent=error;return}const payload={matricula:session.mat,study_date:todayISO(),studies:studyDraft.studies.filter(s=>s.area||s.disciplina||s.assunto),methods:studyDraft.methods,other_method:studyDraft.other_method,questions:studyDraft.methods.includes('questoes')?studyDraft.questions:[],notes:studyDraft.notes};const btn=$('#study-save');btn.disabled=true;btn.textContent='Salvando...';try{const saved=await saveStudyDay(payload);const row=Array.isArray(saved)?saved[0]:saved||payload;msg.className='study-message ok';msg.textContent='✓ Estudo registrado';$('#study-summary-wrap').innerHTML=studySummaryHtml(row);addAudit('ROTINA DE ESTUDOS',`Registro diário · ${session.mat}`)}catch(e){console.error(e);msg.className='study-message err';msg.textContent='Não foi possível salvar. Verifique se o banco de estudos foi configurado.'}finally{btn.disabled=false;btn.textContent='Salvar meu estudo'}}
+async function submitStudentStudy(){syncStudyInputs();const msg=$('#study-message'),error=validateStudyDraft();if(error){msg.className='study-message err';msg.textContent=error;return}const payload={matricula:session.mat,study_date:todayISO(),studies:studyDraft.studies.filter(s=>s.area||s.disciplina||s.assunto),methods:studyDraft.methods,other_method:studyDraft.other_method,questions:studyDraft.methods.includes('questoes')?studyDraft.questions:[],notes:studyDraft.notes};const btn=$('#study-save');btn.disabled=true;btn.textContent='Salvando...';try{const saved=await saveStudyDay(payload);const row=Array.isArray(saved)?saved[0]:saved||payload;msg.className='study-message ok';msg.textContent='✓ Estudo registrado';$('#study-summary-wrap').innerHTML=studySummaryHtml(row);addAudit('ROTINA DE ESTUDOS',`Registro diário · ${session.mat}`);window.dispatchEvent(new CustomEvent('study-record-saved',{detail:{matricula:session.mat,date:todayISO()}}))}catch(e){console.error(e);msg.className='study-message err';msg.textContent='Não foi possível salvar. Verifique se o banco de estudos foi configurado.'}finally{btn.disabled=false;btn.textContent='Salvar meu estudo'}}
 function studySummaryHtml(r){
  r=normalizeStudyRow(r);
  const qs=r.questions||[],total=studyTotalQuestions(qs),hits=studyTotalHits(qs),perf=total?Math.round(hits/total*100):null;
- const studies=(r.studies||[]);
- const methods=(r.methods||[]);
- const topicHtml=studies.length?studies.map(s=>`<div class="study-topic-line"><span class="study-area-chip">${studyAreaLabel(s.area)}</span><b>${esc(s.disciplina||'—')}</b><span>${esc(s.assunto||'—')}</span></div>`).join(''):'<div class="study-summary-empty">Nenhum estudo registrado.</div>';
+ const studies=r.studies||[],methods=r.methods||[];
+ const topicHtml=studies.length?`<div class="study-topic-list">${studies.map(s=>`<div><span class="study-area-chip">${studyAreaLabel(s.area)}</span><div class="study-topic-line"><b>${esc(s.disciplina||'—')}</b><span>${esc(s.assunto||'—')}</span></div></div>`).join('')}</div>`:'<div class="study-summary-empty">Nenhum estudo registrado.</div>';
  const methodHtml=methods.length?`<div class="study-tag-list">${STUDY_METHODS.filter(([k])=>methods.includes(k)).map(([k,l])=>`<span class="study-tag">${esc(k==='outro'&&r.other_method?`${l}: ${r.other_method}`:l)}</span>`).join('')}</div>`:'<div class="study-summary-empty">Sem método informado.</div>';
- return `<div class="study-summary"><div class="study-summary-head"><h3>Resumo do registro</h3><span class="study-summary-date">${fmtDate(r.study_date||todayISO())}</span></div><div class="study-summary-grid"><div class="study-summary-col"><div class="study-summary-section-title">O que você estudou</div>${topicHtml}<div class="study-summary-section-title" style="margin-top:14px">Como você estudou</div>${methodHtml}</div><div class="study-summary-col"><div class="study-summary-section-title">Indicadores do dia</div><div class="study-stat-grid"><div class="study-stat"><span>Questões</span><b>${total||0}</b><small>resolvidas</small></div><div class="study-stat"><span>Acertos</span><b>${hits||0}</b><small>registrados</small></div><div class="study-stat performance"><span>Desempenho</span><b>${perf!=null?perf+'%':'—'}</b><small>no dia</small></div></div></div>${r.notes?`<div class="study-note-wide"><div class="study-summary-section-title">Minhas anotações</div><div class="study-note-box">${esc(r.notes).replace(/\n/g,'<br>')}</div></div>`:''}</div></div>`
+ return `<div class="study-summary"><div class="study-summary-head"><h3>Resumo do registro</h3><span class="study-summary-date">${fmtDate(r.study_date||todayISO())}</span></div><div class="study-summary-grid"><div class="study-summary-col"><div class="study-summary-section-title">O que você estudou</div>${topicHtml}<div class="study-method-wrap"><div class="study-summary-section-title">Como você estudou</div>${methodHtml}</div></div><div class="study-summary-col"><div class="study-summary-section-title">Indicadores do dia</div><div class="study-stat-grid"><div class="study-stat"><div class="study-stat-icon">?</div><span>Questões</span><b>${total||0}</b><small>resolvidas</small></div><div class="study-stat hits"><div class="study-stat-icon">✓</div><span>Acertos</span><b>${hits||0}</b><small>registrados</small></div><div class="study-stat performance"><div class="study-stat-icon">▥</div><span>Desempenho</span><b>${perf!=null?perf+'%':'—'}</b><small>no dia</small></div></div></div><div class="study-note-wide"><div class="study-summary-section-title">Minhas anotações</div><div class="study-note-box">${r.notes?esc(r.notes).replace(/\n/g,'<br>'):'Nenhuma anotação registrada.'}</div></div></div></div>`
 }
 
 async function renderAcompanhamentoEstudos(){
@@ -837,30 +859,34 @@ async function renderAcompanhamentoEstudos(){
  const today=todayISO();
  $('#view').innerHTML=`<div class="card card-pad"><div class="section-title"><div><h2>Acompanhamento de Estudos</h2><p>Controle diário dos registros de estudo e cruzamento com o Espaço Evoluir.</p></div><button class="btn btn-primary" id="study-m-pdf">Gerar PDF</button></div><div class="study-management-tabs"><button class="study-management-tab active" data-mode="today">Hoje</button><button class="study-management-tab" data-mode="week">Semana</button><button class="study-management-tab" data-mode="history">Histórico</button></div><div class="study-manage-top"><div class="filters"><input id="study-m-date" type="date" value="${today}"><select id="study-m-serie"><option value="">Todas as séries</option>${sortedSeries().map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}</select><select id="study-m-student"><option value="">Todos os alunos</option>${alphaStudents().map(s=>`<option value="${s.mat}">${esc(s.nome)}</option>`).join('')}</select><button class="btn btn-dark" id="study-m-refresh">Visualizar</button></div></div><div id="study-m-content"><div class="empty">Carregando...</div></div></div>`;
  $$('.study-management-tab').forEach(b=>b.onclick=()=>{studyManagementMode=b.dataset.mode;$$('.study-management-tab').forEach(x=>x.classList.toggle('active',x===b));refreshStudyManagement()});
- $('#study-m-refresh').onclick=refreshStudyManagement;$('#study-m-pdf').onclick=generateStudyManagementPdf;await refreshStudyManagement();
+ $('#study-m-refresh').onclick=()=>refreshStudyManagement(false);$('#study-m-pdf').onclick=generateStudyManagementPdf;await refreshStudyManagement(false);startStudyLiveSync(()=>refreshStudyManagement(true));
 }
 async function renderAcompanhamentoOrientadora(){
  setTitle('Acompanhamento de Estudos');
  const today=todayISO();
- $('#view').innerHTML=`<div class="orient-study-page"><div class="orient-study-head"><div><h2>Acompanhamento de Estudos</h2><p><b>Orientadora Espaço Evoluir</b><br><span class="orient-subdate">${new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'})}</span></p></div><button class="btn btn-primary" id="orient-study-pdf">Gerar PDF</button></div><div id="orient-study-kpis" class="orient-kpis"></div><div class="orient-filters"><div><label>Data</label><input id="orient-study-date" type="date" value="${today}"></div><div><label>Turma</label><select id="orient-study-class"><option value="">Todas as turmas</option>${sortedSeries().map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}</select></div><div><label>Aluno</label><select id="orient-study-student"><option value="">Todos os alunos</option>${alphaStudents().map(s=>`<option value="${s.mat}">${esc(s.nome)}</option>`).join('')}</select></div><div><label>Status</label><select id="orient-study-status"><option value="">Todos os status</option><option value="registered">Acessou e registrou</option><option value="missing">Acessou e não registrou</option><option value="noaccess">Sem acesso</option></select></div><button class="btn btn-dark" id="orient-study-refresh">Visualizar</button></div><div id="orient-study-table" class="orient-table-card"><div class="empty">Carregando...</div></div><div id="orient-study-alerts" class="orient-alerts"></div></div>`;
- $('#orient-study-refresh').onclick=refreshAcompanhamentoOrientadora;
- $('#orient-study-date').onchange=refreshAcompanhamentoOrientadora;
- $('#orient-study-class').onchange=refreshAcompanhamentoOrientadora;
- $('#orient-study-student').onchange=refreshAcompanhamentoOrientadora;
- $('#orient-study-status').onchange=refreshAcompanhamentoOrientadora;
+ $('#view').innerHTML=`<div class="orient-study-page"><div class="orient-study-head"><div><h2>Acompanhamento de Estudos</h2><p><b>Orientadora Espaço Evoluir</b><span class="orient-subdate">${new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'})}</span></p></div><div><div class="orient-head-actions"><button class="btn btn-ghost" id="orient-study-update">↻ Atualizar</button><button class="btn btn-primary" id="orient-study-pdf">▤ Gerar PDF</button></div><div class="orient-sync-note" id="orient-sync-note">Atualização automática a cada 10 s</div></div></div><div id="orient-study-kpis" class="orient-kpis"></div><div class="orient-filters"><div><label>Data</label><input id="orient-study-date" type="date" value="${today}"></div><div><label>Turma</label><select id="orient-study-class"><option value="">Todas as turmas</option>${sortedSeries().map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}</select></div><div><label>Aluno</label><select id="orient-study-student"><option value="">Todos os alunos</option>${alphaStudents().map(s=>`<option value="${s.mat}">${esc(s.nome)}</option>`).join('')}</select></div><div><label>Status</label><select id="orient-study-status"><option value="">Todos os status</option><option value="registered">Acessou e registrou</option><option value="missing">Acessou e não registrou</option><option value="noaccess">Sem acesso</option></select></div><button class="btn orient-filter-reset" id="orient-study-clear">↻ Limpar filtros</button></div><div id="orient-study-table" class="orient-table-card"><div class="empty">Carregando...</div></div><div id="orient-study-alerts" class="orient-alerts"></div></div>`;
+ const refresh=()=>refreshAcompanhamentoOrientadora(false);
+ $('#orient-study-update').onclick=refresh;
+ $('#orient-study-date').onchange=refresh;
+ $('#orient-study-class').onchange=()=>drawAcompanhamentoOrientadora();
+ $('#orient-study-student').onchange=refresh;
+ $('#orient-study-status').onchange=()=>drawAcompanhamentoOrientadora();
+ $('#orient-study-clear').onclick=()=>{if($('#orient-study-date'))$('#orient-study-date').value=todayISO();if($('#orient-study-class'))$('#orient-study-class').value='';if($('#orient-study-student'))$('#orient-study-student').value='';if($('#orient-study-status'))$('#orient-study-status').value='';refresh()};
  $('#orient-study-pdf').onclick=generateOrientadoraPdf;
- await refreshAcompanhamentoOrientadora();
+ await refreshAcompanhamentoOrientadora(false);
+ startStudyLiveSync(()=>refreshAcompanhamentoOrientadora(true));
 }
 
 let orientadoraStudyRows=null;
-async function refreshAcompanhamentoOrientadora(){
+async function refreshAcompanhamentoOrientadora(silent=false){
  const date=$('#orient-study-date')?.value||todayISO(),mat=$('#orient-study-student')?.value||'';
- const root=$('#orient-study-table');if(root)root.innerHTML='<div class="empty">Carregando...</div>';
+ const root=$('#orient-study-table');if(root&&!silent)root.innerHTML='<div class="empty">Carregando...</div>';
  try{
   const [studyRows,evoluirRows]=await Promise.all([getStudyManagement(date,date,mat||null),getEvoluirManagement(date,date,mat||null)]);
   orientadoraStudyRows={study:studyRows.map(normalizeStudyRow),evoluir:evoluirRows,date};
   drawAcompanhamentoOrientadora();
- }catch(e){console.error(e);if(root)root.innerHTML='<div class="empty">Não foi possível carregar os registros de estudo.</div>'}
+  const note=$('#orient-sync-note');if(note)note.textContent=`Atualizado às ${new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'})} · atualização automática a cada 10 s`;
+ }catch(e){console.error(e);if(root&&!silent)root.innerHTML='<div class="empty">Não foi possível carregar os registros de estudo.</div>'}
 }
 function drawAcompanhamentoOrientadora(){
  const data=orientadoraStudyRows;if(!data)return;
@@ -869,7 +895,7 @@ function drawAcompanhamentoOrientadora(){
  let rows=list.map(s=>{const key=`${s.mat}|${data.date}`;return {student:s,study:studies.get(key)||null,evo:evo.get(key)||null,date:data.date}});
  rows=rows.filter(r=>!status||(status==='registered'&&r.evo&&r.study)||(status==='missing'&&r.evo&&!r.study)||(status==='noaccess'&&!r.evo));
  const accessed=rows.filter(r=>r.evo).length,registered=rows.filter(r=>r.study).length,missing=rows.filter(r=>r.evo&&!r.study).length,totalQs=rows.reduce((n,r)=>n+studyTotalQuestions(r.study?.questions||[]),0);
- $('#orient-study-kpis').innerHTML=`<div class="orient-kpi ok"><div class="orient-kpi-ico">👥</div><div><span>Alunos no Espaço hoje</span><b>${accessed}</b></div></div><div class="orient-kpi"><div class="orient-kpi-ico">▤</div><div><span>Registros realizados</span><b>${registered}</b></div></div><div class="orient-kpi warn"><div class="orient-kpi-ico">!</div><div><span>Sem registro</span><b>${missing}</b></div></div><div class="orient-kpi"><div class="orient-kpi-ico">?</div><div><span>Questões registradas</span><b>${totalQs}</b></div></div>`;
+ $('#orient-study-kpis').innerHTML=`<div class="orient-kpi ok"><div class="orient-kpi-ico">♙</div><div><span>Alunos no Espaço hoje</span><b>${accessed}</b></div></div><div class="orient-kpi"><div class="orient-kpi-ico">▤</div><div><span>Registros realizados</span><b>${registered}</b></div></div><div class="orient-kpi warn"><div class="orient-kpi-ico">!</div><div><span>Sem registro</span><b>${missing}</b></div></div><div class="orient-kpi questions"><div class="orient-kpi-ico">?</div><div><span>Questões registradas</span><b>${totalQs}</b></div></div>`;
  $('#orient-study-table').innerHTML=`<div class="table-wrap"><table class="table"><thead><tr><th>Aluno</th><th>Turma</th><th>Acesso ao Espaço</th><th>Tempo efetivo</th><th>Registrou?</th><th>O que estudou</th><th>Questões</th><th>Anotações</th><th></th></tr></thead><tbody>${rows.length?rows.map(r=>orientStudyRowHtml(r)).join(''):'<tr><td colspan="9"><div class="empty">Nenhum aluno encontrado.</div></td></tr>'}</tbody></table></div>`;
  $$('.study-detail-btn').forEach(b=>b.onclick=()=>openStudyDetail(b.dataset.mat,b.dataset.date));
  const low=rows.filter(r=>{const q=r.study?.questions||[],t=studyTotalQuestions(q),h=studyTotalHits(q);return t>0&&(h/t)<.5}).length;
@@ -878,14 +904,14 @@ function drawAcompanhamentoOrientadora(){
 function orientStudyRowHtml(r){
  const st=r.study,ev=r.evo,qs=studyTotalQuestions(st?.questions||[]),hits=studyTotalHits(st?.questions||[]),perf=qs?Math.round(hits/qs*100):null;
  const what=st?(st.studies||[]).map(x=>`${studyAreaLabel(x.area)} · ${esc(x.disciplina||'')} · ${esc(x.assunto||'')}`).join('<br>'):'—';
- return `<tr><td><div class="student-cell"><span class="avatar">${initials(r.student.nome)}</span><b>${esc(r.student.nome)}</b></div></td><td>${esc(studentLabel(r.student))}</td><td>${ev?'<span class="orient-status ok">✓ Acessou</span>':'<span class="orient-status muted">—</span>'}</td><td>${ev?minutesLabel(ev.effective_minutes):'—'}</td><td>${st?'<span class="orient-status ok">✓ Sim</span>':'<span class="orient-status no">Não</span>'}</td><td>${what}</td><td>${qs?`${qs} questões / ${hits} acertos / ${perf}%`:'—'}</td><td>${st?.notes?'✓':'—'}</td><td>${st?`<button class="btn btn-ghost btn-sm study-detail-btn" data-mat="${r.student.mat}" data-date="${r.date}">Ver detalhes</button>`:''}</td></tr>`
+ return `<tr><td><div class="student-cell"><span class="avatar">${initials(r.student.nome)}</span><b>${esc(r.student.nome)}</b></div></td><td>${esc(studentLabel(r.student))}</td><td>${ev?'<span class="orient-status ok">✓ Acessou</span>':'<span class="orient-status muted">—</span>'}</td><td>${ev?minutesLabel(ev.effective_minutes):'—'}</td><td>${st?'<span class="orient-status ok">✓ Sim</span>':'<span class="orient-status no">Não</span>'}</td><td class="orient-what">${what}</td><td class="orient-question-cell">${qs?`<b>${qs}</b> questões / ${hits} acertos / <b>${perf}%</b>`:'—'}</td><td>${st?.notes?'<span class="orient-note-yes">✓</span>':'—'}</td><td>${st?`<button class="btn btn-ghost btn-sm study-detail-btn orient-detail-btn" data-mat="${r.student.mat}" data-date="${r.date}">Ver detalhes</button>`:''}</td></tr>`
 }
 function generateOrientadoraPdf(){
  if(!orientadoraStudyRows)return;const J=getJsPDF();if(!J){window.print();return}const doc=new J({orientation:'landscape'});doc.setFontSize(17);doc.text('Colégio Evolução — Acompanhamento de Estudos',14,15);doc.setFontSize(10);doc.text(`Orientadora Espaço Evoluir · ${fmtDate(orientadoraStudyRows.date)}`,14,22);let y=32;const studies=studyByKey(orientadoraStudyRows.study),evo=evoByKey(orientadoraStudyRows.evoluir);const list=alphaStudents();doc.setFontSize(8.5);['Aluno','Turma','Acesso','Tempo','Registro','Questões'].forEach((h,i)=>doc.text(h,[14,92,126,154,182,215][i],y));y+=6;list.forEach(s=>{const st=studies.get(`${s.mat}|${orientadoraStudyRows.date}`),ev=evo.get(`${s.mat}|${orientadoraStudyRows.date}`);if(y>190){doc.addPage();y=18}const vals=[s.nome,studentLabel(s),ev?'Sim':'Não',ev?minutesLabel(ev.effective_minutes):'—',st?'Sim':'Não',String(studyTotalQuestions(st?.questions||[]))];vals.forEach((v,i)=>doc.text(String(v||'').slice(0,34),[14,92,126,154,182,215][i],y));y+=5});doc.save(`acompanhamento_orientadora_${orientadoraStudyRows.date}.pdf`)
 }
 
-async function refreshStudyManagement(){
- const root=$('#study-m-content');if(!root)return;root.innerHTML='<div class="empty">Carregando...</div>';
+async function refreshStudyManagement(silent=false){
+ const root=$('#study-m-content');if(!root)return;if(!silent)root.innerHTML='<div class="empty">Carregando...</div>';
  const base=$('#study-m-date')?.value||todayISO();let from=base,to=base;if(studyManagementMode==='week'){from=studyMonday(base);to=studySunday(base)}else if(studyManagementMode==='history'){const d=new Date(base+'T12:00:00');d.setDate(d.getDate()-29);from=localDateISO(d);to=base}
  const mat=$('#study-m-student')?.value||'';
  try{
